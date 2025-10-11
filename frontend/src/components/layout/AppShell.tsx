@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { usePathname } from "next/navigation";
+import { AppBreadcrumbs } from "@/components/navigation/AppBreadcrumbs";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -26,7 +27,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             aria-hidden
           />
         )}
-        <main className="min-w-0 pb-12 md:pb-16">{children}</main>
+        <main className="min-w-0 pb-12 md:pb-16">
+          <div className="sticky top-14 z-20 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 -mx-4 px-4 md:mx-0 md:px-0">
+            <div className="py-2 md:py-3">
+              <AppBreadcrumbs />
+            </div>
+          </div>
+          {children}
+        </main>
       </div>
     </div>
   );
