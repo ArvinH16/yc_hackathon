@@ -55,6 +55,25 @@ export default function Home() {
               referrerPolicy="no-referrer-when-downgrade"
             />
           </div>
+          <div className="mt-2 text-xs text-muted-foreground">
+            If you see “refused to connect”, the site blocks embedding. Use the buttons below.
+          </div>
+          <div className="mt-2 flex gap-2">
+            <a
+              href="https://app.coval.dev/beambell/runs/buxXcfdhyKtzufnWsTgFFU"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex"
+            >
+              <Button variant="outline">Open run in new tab</Button>
+            </a>
+            <Button
+              variant="ghost"
+              onClick={() => navigator.clipboard?.writeText('https://app.coval.dev/beambell/runs/buxXcfdhyKtzufnWsTgFFU')}
+            >
+              Copy link
+            </Button>
+          </div>
         </div>
       ) : (
         <div className="mb-4">
