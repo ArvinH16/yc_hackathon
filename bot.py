@@ -10,6 +10,7 @@ import sys
 from dotenv import load_dotenv
 from loguru import logger
 from pipecat.audio.vad.silero import SileroVADAnalyzer
+from pipecat.frames.frames import LLMMessagesAppendFrame
 from pipecat.pipeline.pipeline import Pipeline
 from pipecat.pipeline.runner import PipelineRunner
 from pipecat.pipeline.task import PipelineParams, PipelineTask
@@ -83,8 +84,19 @@ async def run_bot(transport: BaseTransport, handle_sigint: bool):
 
     @transport.event_handler("on_client_connected")
     async def on_client_connected(transport, client):
-        # Kick off the outbound conversation, waiting for the user to speak first
+        # Kick off the outbound conversation with an immediate greeting
         logger.info("Starting outbound call conversation")
+        initial_prompt = (
+            "The call has just connected. Greet the person warmly, introduce yourself as "
+            "Bella, and explain you're calling to see if you can get an appointment today. "
+            "Keep it brief and invite them to respond."
+        )
+        await task.queue_frame(
+            LLMMessagesAppendFrame(
+                messages=[{"role": "user", "content": initial_prompt}],
+                run_llm=True,
+            )
+        )
 
     @transport.event_handler("on_client_disconnected")
     async def on_client_disconnected(transport, client):
