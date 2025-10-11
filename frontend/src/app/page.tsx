@@ -41,6 +41,21 @@ export default function Home() {
           </div>
         )}
       />
+      {mode === 'admin' && (
+        <div className="mb-4">
+          <div className="mb-2 text-sm text-muted-foreground">BeamBell view — embedded run</div>
+          <div className="overflow-hidden rounded-md border h-[70vh]">
+            <iframe
+              src="https://app.coval.dev/beambell/runs/buxXcfdhyKtzufnWsTgFFU"
+              title="BeamBell Coval Run"
+              className="w-full h-full"
+              frameBorder={0}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+        </div>
+      )}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {links.map((l) => (
           <Card key={l.href}>
