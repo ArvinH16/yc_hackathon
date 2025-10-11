@@ -30,7 +30,7 @@ TwiML fetched → WebSocket connection → Bot conversation
 
 ### AI Services
 
-- OpenAI API key for the LLM inference
+- Gemini API key for the LLM inference
 - Deepgram API key for speech-to-text
 - Cartesia API key for text-to-speech
 

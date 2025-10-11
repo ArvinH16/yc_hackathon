@@ -19,7 +19,7 @@ from pipecat.runner.utils import parse_telephony_websocket
 from pipecat.serializers.twilio import TwilioFrameSerializer
 from pipecat.services.cartesia.tts import CartesiaTTSService
 from pipecat.services.deepgram.stt import DeepgramSTTService
-from pipecat.services.openai.llm import OpenAILLMService
+from pipecat.services.google.llm import GoogleLLMService
 from pipecat.transports.base_transport import BaseTransport
 from pipecat.transports.websocket.fastapi import (
     FastAPIWebsocketParams,
@@ -33,7 +33,10 @@ logger.add(sys.stderr, level="DEBUG")
 
 
 async def run_bot(transport: BaseTransport, handle_sigint: bool):
-    llm = OpenAILLMService(api_key=os.getenv("OPENAI_API_KEY"))
+    llm = GoogleLLMService(
+        api_key=os.getenv("GEMINI_API_KEY", ""),
+        model="gemini-2.5-flash",
+    )
 
     stt = DeepgramSTTService(api_key=os.getenv("DEEPGRAM_API_KEY"))
 
