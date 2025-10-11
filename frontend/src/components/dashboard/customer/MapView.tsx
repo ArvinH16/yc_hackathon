@@ -10,10 +10,11 @@ import {
 } from 'react-leaflet';
 
 import { mockCompetitors, mockCustomerBusiness } from '@/data/mock/mockBusinesses';
+import { businessLocations } from '@/data/mock/mockLocations';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import { MILES_TO_METERS } from '@/constants/colors';
-import { filterByRadius, getCompetitorColor } from '@/lib/utils';
-import type { Business } from '@/types/business';
+import { filterByRadiusByName, getCompetitorColorSimple } from '@/lib/utils';
+import type { SimplifiedBusiness } from '@/types/business';
 import { BusinessDetailModal } from './BusinessDetailModal';
 import { useViewMode } from '@/components/providers/view-mode-provider';
 import { getEffectiveCIConfig } from '@/lib/config';
@@ -23,7 +24,7 @@ type ColorMode = 'ai' | 'competitive';
 
 export function MapView({ colorBy = 'ai' }: { colorBy?: ColorMode }) {
   const geo = useGeolocation();
-  const [selected, setSelected] = useState<Business | null>(null);
+  const [selected, setSelected] = useState<SimplifiedBusiness | null>(null);
   
 
   const center = useMemo(() => {
@@ -31,9 +32,10 @@ export function MapView({ colorBy = 'ai' }: { colorBy?: ColorMode }) {
       return { lat: geo.latitude, lng: geo.longitude };
     }
     // Fallback to customer business location
+    const loc = businessLocations[mockCustomerBusiness.businessName];
     return {
-      lat: mockCustomerBusiness.location.lat,
-      lng: mockCustomerBusiness.location.lng,
+      lat: loc?.lat ?? 37.7749,
+      lng: loc?.lng ?? -122.4194,
     };
   }, [geo.latitude, geo.longitude, geo.loading]);
 
@@ -41,7 +43,7 @@ export function MapView({ colorBy = 'ai' }: { colorBy?: ColorMode }) {
   const cfg = getEffectiveCIConfig(mode);
   const radiusMiles = cfg.searchRadiusMiles;
   const inRadius = useMemo(
-    () => filterByRadius(mockCompetitors, center.lat, center.lng, radiusMiles),
+    () => filterByRadiusByName(mockCompetitors, center.lat, center.lng, radiusMiles, businessLocations),
     [center.lat, center.lng, radiusMiles]
   );
 
@@ -86,11 +88,13 @@ export function MapView({ colorBy = 'ai' }: { colorBy?: ColorMode }) {
         {/* Competitor markers */}
         {inRadius.map((b) => {
           const colorCfg = colorBy === 'ai' ? cfg : { ...cfg, aiTakesPrecedence: false };
-          const color = getCompetitorColor(b, mockCustomerBusiness, colorCfg);
+          const color = getCompetitorColorSimple(b, mockCustomerBusiness, colorCfg);
+          const loc = businessLocations[b.businessName];
+          if (!loc) return null;
           return (
             <CircleMarker
-              key={b.id}
-              center={[b.location.lat, b.location.lng]}
+              key={b.businessName}
+              center={[loc.lat, loc.lng]}
               radius={8}
               pathOptions={{ color, fillColor: color, fillOpacity: 0.9 }}
               eventHandlers={{
@@ -99,15 +103,15 @@ export function MapView({ colorBy = 'ai' }: { colorBy?: ColorMode }) {
             >
               <Popup>
                 <div className="text-sm space-y-1">
-                  <div className="font-medium">{b.name}</div>
+                  <div className="font-medium">{b.businessName}</div>
                   <div>
-                    {b.location.address}, {b.location.city}
+                    {loc.address}, {loc.city}
                   </div>
                   <div className="mt-2 flex items-center gap-2">
                     <Button variant="outline" size="sm" className="h-7 px-2 text-xs" onClick={() => setSelected(b)}>
                       Quick details
                     </Button>
-                    <Link href={`/dashboard/business/${encodeURIComponent(b.id)}`}>
+                    <Link href={`/dashboard/business/${encodeURIComponent(b.businessName)}`}>
                       <Button variant="ghost" size="sm" className="h-7 px-2 text-xs">
                         Open profile
                       </Button>

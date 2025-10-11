@@ -38,6 +38,5 @@ export interface RevenueOpportunity {
   estimatedRevenue: number; // per month
   confidence: number; // 0-1
   actionSteps: string[];
-  competitors: string[]; // Business IDs
+  competitors: string[]; // Business names
 }
-

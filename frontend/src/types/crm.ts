@@ -1,4 +1,4 @@
-import type { AIDetection, Business } from './business';
+import type { AIDetection } from './business';
 
 export type OutreachStatus =
   | 'not_contacted'
@@ -10,8 +10,7 @@ export type OutreachStatus =
   | 'not_interested';
 
 export interface Lead {
-  businessId: string;
-  business?: Business;
+  businessName: string;
   leadScore: number; // 0-100
   aiDetection: AIDetection;
   outreachStatus: OutreachStatus;
@@ -22,4 +21,3 @@ export interface Lead {
   assignedTo?: string;
   conversionProbability: number; // 0-1
 }
-

@@ -167,7 +167,7 @@ export const mockRevenueOpportunities: RevenueOpportunity[] = [
       'Set competitive price at $340',
       'Market to existing balayage customers',
     ],
-    competitors: ['comp-1', 'comp-4', 'comp-5'],
+    competitors: ['Luxe Hair Studio', 'Bay Beauty MedSpa', 'Sunset Styles'],
   },
   {
     id: 'opp-2',
@@ -181,7 +181,7 @@ export const mockRevenueOpportunities: RevenueOpportunity[] = [
       'Add usage tracking in POS',
       'Promote to color clients',
     ],
-    competitors: ['comp-10', 'comp-13'],
+    competitors: ['Marina Glow Salon', 'Ocean Avenue Salon'],
   },
   {
     id: 'opp-3',
@@ -191,6 +191,6 @@ export const mockRevenueOpportunities: RevenueOpportunity[] = [
     estimatedRevenue: 900,
     confidence: 0.6,
     actionSteps: ['Update price sheet', 'Announce upcoming change in newsletter'],
-    competitors: ['comp-8', 'comp-12'],
+    competitors: ['Pacific Heights Aesthetics', 'Mission Med Aesthetics'],
   },
 ];

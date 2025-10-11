@@ -2,7 +2,7 @@ import type { Lead } from '@/types/crm';
 
 export const mockLeads: Lead[] = [
   {
-    businessId: 'comp-1',
+    businessName: 'Luxe Hair Studio',
     leadScore: 85,
     aiDetection: { isAI: false, confidence: 0.95, detectionMethod: 'voice_pattern' },
     outreachStatus: 'email_sent',
@@ -17,7 +17,7 @@ export const mockLeads: Lead[] = [
     conversionProbability: 0.72,
   },
   {
-    businessId: 'comp-2',
+    businessName: 'Mission Cuts',
     leadScore: 60,
     aiDetection: { isAI: true, confidence: 0.9, detectionMethod: 'response_time', aiProvider: 'Other' },
     outreachStatus: 'not_contacted',
@@ -26,7 +26,7 @@ export const mockLeads: Lead[] = [
     conversionProbability: 0.4,
   },
   {
-    businessId: 'comp-3',
+    businessName: 'SoMa Spa & Wellness',
     leadScore: 70,
     aiDetection: { isAI: false, confidence: 0.7, detectionMethod: 'voice_pattern' },
     outreachStatus: 'follow_up_sent',
@@ -35,7 +35,7 @@ export const mockLeads: Lead[] = [
     conversionProbability: 0.55,
   },
   {
-    businessId: 'comp-6',
+    businessName: 'Nob Hill Nails & Spa',
     leadScore: 48,
     aiDetection: { isAI: false, confidence: 0.6, detectionMethod: 'voice_pattern' },
     outreachStatus: 'not_contacted',
@@ -44,7 +44,7 @@ export const mockLeads: Lead[] = [
     conversionProbability: 0.28,
   },
   {
-    businessId: 'comp-7',
+    businessName: 'Castro Cuts',
     leadScore: 74,
     aiDetection: { isAI: true, confidence: 0.8, detectionMethod: 'response_time', aiProvider: 'Other' },
     outreachStatus: 'responded',
@@ -54,7 +54,7 @@ export const mockLeads: Lead[] = [
     conversionProbability: 0.58,
   },
   {
-    businessId: 'comp-8',
+    businessName: 'Pacific Heights Aesthetics',
     leadScore: 67,
     aiDetection: { isAI: false, confidence: 0.55, detectionMethod: 'conversation_flow' },
     outreachStatus: 'email_sent',
@@ -63,7 +63,7 @@ export const mockLeads: Lead[] = [
     conversionProbability: 0.46,
   },
   {
-    businessId: 'comp-9',
+    businessName: 'Tenderloin Thai Massage',
     leadScore: 52,
     aiDetection: { isAI: false, confidence: 0.6, detectionMethod: 'voice_pattern' },
     outreachStatus: 'not_contacted',
@@ -72,7 +72,7 @@ export const mockLeads: Lead[] = [
     conversionProbability: 0.33,
   },
   {
-    businessId: 'comp-10',
+    businessName: 'Marina Glow Salon',
     leadScore: 88,
     aiDetection: { isAI: true, confidence: 0.92, detectionMethod: 'response_time', aiProvider: 'Beam Bell' },
     outreachStatus: 'meeting_scheduled',
@@ -82,7 +82,7 @@ export const mockLeads: Lead[] = [
     conversionProbability: 0.76,
   },
   {
-    businessId: 'comp-11',
+    businessName: 'Downtown Barber Co.',
     leadScore: 61,
     aiDetection: { isAI: true, confidence: 0.8, detectionMethod: 'response_time', aiProvider: 'Other' },
     outreachStatus: 'follow_up_sent',
@@ -91,7 +91,7 @@ export const mockLeads: Lead[] = [
     conversionProbability: 0.5,
   },
   {
-    businessId: 'comp-12',
+    businessName: 'Mission Med Aesthetics',
     leadScore: 69,
     aiDetection: { isAI: false, confidence: 0.55, detectionMethod: 'conversation_flow' },
     outreachStatus: 'email_sent',
@@ -100,7 +100,7 @@ export const mockLeads: Lead[] = [
     conversionProbability: 0.45,
   },
   {
-    businessId: 'comp-13',
+    businessName: 'Ocean Avenue Salon',
     leadScore: 57,
     aiDetection: { isAI: false, confidence: 0.6, detectionMethod: 'voice_pattern' },
     outreachStatus: 'not_contacted',
@@ -109,7 +109,7 @@ export const mockLeads: Lead[] = [
     conversionProbability: 0.31,
   },
   {
-    businessId: 'comp-14',
+    businessName: 'Hayes Valley Spa',
     leadScore: 79,
     aiDetection: { isAI: true, confidence: 0.7, detectionMethod: 'response_time', aiProvider: 'Beam Bell' },
     outreachStatus: 'responded',
@@ -118,7 +118,7 @@ export const mockLeads: Lead[] = [
     conversionProbability: 0.6,
   },
   {
-    businessId: 'comp-15',
+    businessName: 'Richmond Relax Spa',
     leadScore: 62,
     aiDetection: { isAI: false, confidence: 0.65, detectionMethod: 'voice_pattern' },
     outreachStatus: 'email_sent',

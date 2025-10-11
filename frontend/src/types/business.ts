@@ -1,5 +1,15 @@
 export type BusinessType = 'salon' | 'spa' | 'barber' | 'medspa';
 
+// Simplified business model for mock/frontend usage
+export interface SimplifiedBusiness {
+  businessName: string;
+  phone: string;
+  email?: string;
+  industry: BusinessType;
+  services: string[]; // List of service names
+  prices: Record<string, number>; // Map service name -> price
+}
+
 export interface Location {
   lat: number;
   lng: number;
@@ -57,4 +67,3 @@ export interface Business {
   lastUpdated: string; // ISO date string
   dataQuality: number; // 0-1
 }
-

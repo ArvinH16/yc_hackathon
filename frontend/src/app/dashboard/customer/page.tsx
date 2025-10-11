@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { mockCustomerBusiness } from "@/data/mock/mockBusinesses";
+import { businessLocations } from "@/data/mock/mockLocations";
 import { customerProfile } from "@/data/mock/mockCompanyProfiles";
 import { defaultCIConfig } from "@/data/mock/mockCIConfig";
 import Link from "next/link";
@@ -18,7 +19,7 @@ export default function CustomerOverviewPage() {
 
   return (
     <PageContainer>
-      <PageHeader title={biz.name} description={profile.tagline} actions={
+      <PageHeader title={biz.businessName} description={profile.tagline} actions={
         <div className="flex gap-2">
           <Link href="/dashboard/customer/map">
             <Button variant="secondary">Open Map</Button>
@@ -69,17 +70,16 @@ export default function CustomerOverviewPage() {
           <CardContent className="space-y-2 text-sm">
             <div>
               <div className="font-medium">Category</div>
-              <div className="mt-1"><Badge variant="secondary" className="mr-1 capitalize">{biz.type}</Badge></div>
+              <div className="mt-1"><Badge variant="secondary" className="mr-1 capitalize">{biz.industry}</Badge></div>
             </div>
             <Separator />
             <div>
               <div className="font-medium">Address</div>
-              <div className="mt-1">{biz.location.address}, {biz.location.city}, {biz.location.state} {biz.location.zipCode}</div>
+              <div className="mt-1">{(() => { const loc = businessLocations[biz.businessName]; return loc ? `${loc.address}, ${loc.city}, ${loc.state} ${loc.zipCode}` : '—'; })()}</div>
             </div>
             <div>
               <div className="font-medium">Contact</div>
               <div className="mt-1">Phone: {biz.phone}</div>
-              {biz.website && <div>Website: <a href={biz.website} target="_blank" rel="noreferrer" className="text-primary underline">{biz.website}</a></div>}
             </div>
             {profile.hours && (
               <div>
@@ -140,4 +140,3 @@ export default function CustomerOverviewPage() {
     </PageContainer>
   );
 }
-
