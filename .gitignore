@@ -2,6 +2,7 @@
 .env
 .env.local
 .env.*.local
+backend/.env
 
 # Python
 __pycache__/
@@ -29,6 +30,9 @@ wheels/
 venv/
 ENV/
 env/
+.venv/
+backend/.venv/
+backend/.uv-cache/
 
 # IDE
 .vscode/
@@ -46,3 +50,7 @@ Thumbs.db
 
 # uv
 uv.lock
+backend/uv.lock
+
+# Backend cache
+backend/__pycache__/
