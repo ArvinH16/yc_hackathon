@@ -10,6 +10,7 @@ import sys
 from dotenv import load_dotenv
 from loguru import logger
 from pipecat.audio.vad.silero import SileroVADAnalyzer
+from pipecat.frames.frames import LLMMessagesAppendFrame
 from pipecat.pipeline.pipeline import Pipeline
 from pipecat.pipeline.runner import PipelineRunner
 from pipecat.pipeline.task import PipelineParams, PipelineTask
@@ -17,7 +18,7 @@ from pipecat.processors.aggregators.openai_llm_context import OpenAILLMContext
 from pipecat.runner.types import RunnerArguments
 from pipecat.runner.utils import parse_telephony_websocket
 from pipecat.serializers.twilio import TwilioFrameSerializer
-from pipecat.services.cartesia.tts import CartesiaTTSService
+from pipecat.services.elevenlabs.tts import ElevenLabsTTSService
 from pipecat.services.deepgram.stt import DeepgramSTTService
 from pipecat.services.google.llm import GoogleLLMService
 from pipecat.transports.base_transport import BaseTransport
@@ -90,9 +91,10 @@ async def run_bot(transport: BaseTransport, handle_sigint: bool):
 
     stt = DeepgramSTTService(api_key=os.getenv("DEEPGRAM_API_KEY"))
 
-    tts = CartesiaTTSService(
-        api_key=os.getenv("CARTESIA_API_KEY"),
-        voice_id="71a7ad14-091c-4e8e-a314-022ece01c121",  # British Reading Lady
+    tts = ElevenLabsTTSService(
+        api_key=os.getenv("XI_API_KEY"),
+        voice_id=os.getenv("ELEVENLABS_VOICE_ID"),
+        model=os.getenv("XI_MODEL_ID"),
     )
 
     messages = [
@@ -142,8 +144,19 @@ async def run_bot(transport: BaseTransport, handle_sigint: bool):
 
     @transport.event_handler("on_client_connected")
     async def on_client_connected(transport, client):
-        # Kick off the outbound conversation, waiting for the user to speak first
+        # Kick off the outbound conversation with an immediate greeting
         logger.info("Starting outbound call conversation")
+        initial_prompt = (
+            "The call has just connected. Greet the person warmly, introduce yourself as "
+            "Bella, and explain you're calling to see if you can get an appointment today. "
+            "Keep it brief and invite them to respond."
+        )
+        await task.queue_frame(
+            LLMMessagesAppendFrame(
+                messages=[{"role": "user", "content": initial_prompt}],
+                run_llm=True,
+            )
+        )
 
     @transport.event_handler("on_client_disconnected")
     async def on_client_disconnected(transport, client):
