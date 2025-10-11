@@ -1,5 +1,80 @@
-import type { SimplifiedBusiness } from '@/types/business';
+import type { SimplifiedBusiness, BusinessType } from '@/types/business';
 import type { CustomerBusiness } from '@/types/user';
+import rawMockBusiness from './mockBusiness.json';
+
+// Helper: map free-form industry string to our BusinessType
+function mapIndustryToType(industry?: string): BusinessType {
+  const s = (industry || '').toLowerCase();
+  if (s.includes('med') || s.includes('aesthetic') || s.includes('inject')) return 'medspa';
+  if (s.includes('barber')) return 'barber';
+  if (s.includes('spa')) return 'spa';
+  if (s.includes('salon') || s.includes('hair')) return 'salon';
+  return 'salon';
+}
+
+// Helper: parse a price string like "$65-$95" or "$150" into a number (average if range)
+function parsePriceToNumber(input?: string): number | undefined {
+  if (!input) return undefined;
+  const cleaned = input.replace(/\$/g, '').trim();
+  const parts = cleaned.split(/\s*-\s*|–|—/).map((p) => parseFloat(p.replace(/[^0-9.]/g, ''))).filter((n) => !Number.isNaN(n));
+  if (parts.length === 0) return undefined;
+  if (parts.length === 1) return parts[0];
+  return Math.round(((parts[0] + parts[1]) / 2) * 100) / 100;
+}
+
+// Helper: map provided JSON price keys to service display names used in our UI
+const priceKeyToServiceName: Record<string, string> = {
+  womens_haircut: "Women's haircut and styling",
+  mens_haircut: "Men's haircut and grooming",
+  full_color: 'Hair coloring and highlights',
+  highlights: 'Hair coloring and highlights',
+  balayage: 'Balayage and ombre',
+  keratin_treatment: 'Keratin treatments',
+  hair_extensions: 'Hair extensions',
+  blowout: 'Blowouts and styling',
+  bridal_styling: 'Bridal and special event styling',
+  conditioning_treatment: 'Deep conditioning treatments',
+};
+
+// Build a CustomerBusiness from JSON with safe fallbacks to existing mock if needed
+function buildCustomerFromJson(): CustomerBusiness | null {
+  try {
+    const j: any = rawMockBusiness as any;
+    if (!j || typeof j !== 'object') return null;
+
+    // Compose prices mapped to our service display names
+    const prices: Record<string, number> = {};
+    if (j.prices && typeof j.prices === 'object') {
+      for (const [key, val] of Object.entries(j.prices as Record<string, string>)) {
+        const serviceName = priceKeyToServiceName[key] || key.replace(/_/g, ' ');
+        const num = parsePriceToNumber(val);
+        if (num !== undefined) prices[serviceName] = num;
+      }
+    }
+
+    const services: string[] = Array.isArray(j.services) && j.services.length > 0
+      ? j.services
+      : Object.keys(prices);
+
+    const cb: CustomerBusiness = {
+      businessName: j.businessName || 'Your Salon Name',
+      phone: j.phone || '(415) 555-0200',
+      email: j.email || undefined,
+      industry: mapIndustryToType(j.industry),
+      services,
+      prices: prices,
+      // Fallbacks for fields not present in provided JSON
+      subscriptionPlan: 'pro',
+      subscriptionStatus: 'active',
+      searchRadius: 10,
+      autoRefreshEnabled: true,
+      refreshFrequency: 'weekly',
+    };
+    return cb;
+  } catch {
+    return null;
+  }
+}
 
 export const mockCompetitors: SimplifiedBusiness[] = [
   {
@@ -110,7 +185,8 @@ export const mockCompetitors: SimplifiedBusiness[] = [
   },
 ];
 
-export const mockCustomerBusiness: CustomerBusiness = {
+// Existing fallback in case JSON is missing fields we need
+const fallbackCustomerBusiness: CustomerBusiness = {
   businessName: 'Your Salon Name',
   phone: '(415) 555-0200',
   industry: 'salon',
@@ -122,3 +198,5 @@ export const mockCustomerBusiness: CustomerBusiness = {
   autoRefreshEnabled: true,
   refreshFrequency: 'weekly',
 };
+
+export const mockCustomerBusiness: CustomerBusiness = buildCustomerFromJson() || fallbackCustomerBusiness;

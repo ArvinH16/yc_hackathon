@@ -25,6 +25,7 @@ Open http://localhost:3000 to view the app. Pages live under `src/app/`.
 - `src/app/` — App Router pages/layouts
 - `src/components/ui/` — UI primitives (button, card, dialog, table, tabs, etc.)
 - `src/components/layout/` — Shell components (Navbar, Sidebar, AppShell)
+- `src/components/navigation/` — App-level navigation (breadcrumbs)
 - `src/components/providers/` — Theme and view mode providers
 - `src/types/` — TypeScript types
 - `src/data/mock/` — Mock data for local development
@@ -32,6 +33,11 @@ Open http://localhost:3000 to view the app. Pages live under `src/app/`.
 ## UI System
 
 See `frontend/README-UI.md` for tokens, accessibility patterns, and component APIs.
+
+### Breadcrumbs
+- Global breadcrumbs are rendered in `AppShell` via `AppBreadcrumbs`.
+- Auto-generates from the current path and maps common segments to friendly labels.
+- Uses shadcn-style primitives in `src/components/ui/breadcrumb.tsx`.
 
 ## Notes
 

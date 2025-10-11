@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { mockCustomerBusiness } from "@/data/mock/mockBusinesses";
 import { businessLocations } from "@/data/mock/mockLocations";
+import rawMockBusiness from "@/data/mock/mockBusiness.json";
 import { customerProfile } from "@/data/mock/mockCompanyProfiles";
 import { defaultCIConfig } from "@/data/mock/mockCIConfig";
 import Link from "next/link";
@@ -75,7 +76,16 @@ export default function CustomerOverviewPage() {
             <Separator />
             <div>
               <div className="font-medium">Address</div>
-              <div className="mt-1">{(() => { const loc = businessLocations[biz.businessName]; return loc ? `${loc.address}, ${loc.city}, ${loc.state} ${loc.zipCode}` : '—'; })()}</div>
+              <div className="mt-1">{(() => {
+                const loc = businessLocations[biz.businessName];
+                if (loc) return `${loc.address}, ${loc.city}, ${loc.state} ${loc.zipCode}`;
+                const j: any = rawMockBusiness as any;
+                const jl = j?.location;
+                if (jl && jl.address && jl.city && jl.state && jl.zip) {
+                  return `${jl.address}, ${jl.city}, ${jl.state} ${jl.zip}`;
+                }
+                return '—';
+              })()}</div>
             </div>
             <div>
               <div className="font-medium">Contact</div>

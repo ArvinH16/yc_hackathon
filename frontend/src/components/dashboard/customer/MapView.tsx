@@ -12,7 +12,7 @@ import {
 import { mockCompetitors, mockCustomerBusiness } from '@/data/mock/mockBusinesses';
 import { businessLocations } from '@/data/mock/mockLocations';
 import { useGeolocation } from '@/hooks/useGeolocation';
-import { MILES_TO_METERS } from '@/constants/colors';
+import { MARKER_COLORS, MILES_TO_METERS } from '@/constants/colors';
 import { filterByRadiusByName, getCompetitorColorSimple } from '@/lib/utils';
 import type { SimplifiedBusiness } from '@/types/business';
 import { BusinessDetailModal } from './BusinessDetailModal';
@@ -20,6 +20,7 @@ import { useViewMode } from '@/components/providers/view-mode-provider';
 import { getEffectiveCIConfig } from '@/lib/config';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { mockAIStatus } from '@/data/mock/mockAIStatus';
 type ColorMode = 'ai' | 'competitive';
 
 export function MapView({ colorBy = 'ai' }: { colorBy?: ColorMode }) {
@@ -87,8 +88,10 @@ export function MapView({ colorBy = 'ai' }: { colorBy?: ColorMode }) {
 
         {/* Competitor markers */}
         {inRadius.map((b) => {
-          const colorCfg = colorBy === 'ai' ? cfg : { ...cfg, aiTakesPrecedence: false };
-          const color = getCompetitorColorSimple(b, mockCustomerBusiness, colorCfg);
+          const color =
+            colorBy === 'ai'
+              ? (mockAIStatus[b.businessName] === 'ai' ? MARKER_COLORS.ai_agent : MARKER_COLORS.human)
+              : getCompetitorColorSimple(b, mockCustomerBusiness, { ...cfg, aiTakesPrecedence: false });
           const loc = businessLocations[b.businessName];
           if (!loc) return null;
           return (
