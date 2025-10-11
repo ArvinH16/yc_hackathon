@@ -11,8 +11,12 @@ import { getEffectiveCIConfig } from '@/lib/config';
 import { Collapsible } from '@/components/ui/collapsible';
 // Removed color mode selector; mode determines coloring
 
-const MapView = dynamic(
-  () => import('@/components/dashboard/customer/MapView').then((m) => m.MapView),
+const MapViewAI = dynamic(
+  () => import('@/components/dashboard/customer/MapViewAI').then((m) => m.MapViewAI),
+  { ssr: false }
+);
+const MapViewCompetitive = dynamic(
+  () => import('@/components/dashboard/customer/MapViewCompetitive').then((m) => m.MapViewCompetitive),
   { ssr: false }
 );
 
@@ -20,7 +24,7 @@ export default function CustomerMapPage() {
   const { mode } = useViewMode();
   const cfg = getEffectiveCIConfig(mode);
   const showLegend = cfg.map?.showLegend !== false;
-  const colorBy = useMemo<'ai' | 'competitive'>(() => (mode === 'customer' ? 'competitive' : 'ai'), [mode]);
+  const legendMode = useMemo<'ai' | 'competitive'>(() => (mode === 'customer' ? 'competitive' : 'ai'), [mode]);
   return (
     <PageContainer size="wide">
       <PageHeader title="Map" description="Competitor map with 10-mile radius" />
@@ -28,7 +32,7 @@ export default function CustomerMapPage() {
         <Card className="md:col-span-2">
           {/* Color mode derives from view mode; no manual selector */}
           <div className="h-[55vh] w-full rounded-lg md:h-[70vh]">
-            <MapView colorBy={colorBy} />
+            {mode === 'customer' ? <MapViewCompetitive /> : <MapViewAI />}
           </div>
         </Card>
         <div className="md:col-span-1">
@@ -45,12 +49,12 @@ export default function CustomerMapPage() {
                   }
                 >
                   <div className="mt-2">
-                    <MapLegend mode={colorBy} />
+                    <MapLegend mode={legendMode} />
                   </div>
                 </Collapsible>
               </div>
               <div className="hidden md:block">
-                <MapLegend mode={colorBy} />
+                <MapLegend mode={legendMode} />
               </div>
             </div>
           )}
