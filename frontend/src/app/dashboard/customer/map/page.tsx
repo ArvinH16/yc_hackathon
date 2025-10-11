@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from 'next/dynamic';
-import { useState } from 'react';
+import { useMemo } from 'react';
 import { PageContainer } from '@/components/layout/PageContainer';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { MapLegend } from '@/components/dashboard/customer/MapLegend';
@@ -9,7 +9,7 @@ import { Card } from '@/components/ui/card';
 import { useViewMode } from '@/components/providers/view-mode-provider';
 import { getEffectiveCIConfig } from '@/lib/config';
 import { Collapsible } from '@/components/ui/collapsible';
-import { Select } from '@/components/ui/select';
+// Removed color mode selector; mode determines coloring
 
 const MapView = dynamic(
   () => import('@/components/dashboard/customer/MapView').then((m) => m.MapView),
@@ -20,21 +20,15 @@ export default function CustomerMapPage() {
   const { mode } = useViewMode();
   const cfg = getEffectiveCIConfig(mode);
   const showLegend = cfg.map?.showLegend !== false;
-  const [colorBy, setColorBy] = useState<'ai' | 'competitive'>('ai');
+  const legendMode = useMemo<'ai' | 'competitive'>(() => (mode === 'customer' ? 'competitive' : 'ai'), [mode]);
   return (
     <PageContainer size="wide">
       <PageHeader title="Map" description="Competitor map with 10-mile radius" />
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Card className="md:col-span-2">
-          <div className="flex items-center justify-end gap-2 p-3">
-            <label htmlFor="colorBy" className="text-sm">Color by</label>
-            <Select id="colorBy" value={colorBy} onChange={(e) => setColorBy(e.target.value as 'ai' | 'competitive')} className="w-40">
-              <option value="ai">AI status</option>
-              <option value="competitive">Competitive positioning</option>
-            </Select>
-          </div>
+          {/* Color mode derives from view mode; no manual selector */}
           <div className="h-[55vh] w-full rounded-lg md:h-[70vh]">
-            <MapView colorBy={colorBy} />
+            <MapView colorBy={legendMode} key={legendMode} />
           </div>
         </Card>
         <div className="md:col-span-1">
@@ -51,12 +45,12 @@ export default function CustomerMapPage() {
                   }
                 >
                   <div className="mt-2">
-                    <MapLegend mode={colorBy} />
+                    <MapLegend mode={legendMode} />
                   </div>
                 </Collapsible>
               </div>
               <div className="hidden md:block">
-                <MapLegend mode={colorBy} />
+                <MapLegend mode={legendMode} />
               </div>
             </div>
           )}

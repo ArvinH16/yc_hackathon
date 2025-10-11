@@ -2,6 +2,7 @@
 
 import type { SimplifiedBusiness } from '@/types/business';
 import { businessLocations } from '@/data/mock/mockLocations';
+import rawMockBusiness from '@/data/mock/mockBusiness.json';
 import { DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { ResponsiveDialog } from '@/components/ui/responsive-dialog';
@@ -22,7 +23,10 @@ export function BusinessDetailModal({ business, onClose }: Props) {
             <DialogDescription>
               {(() => {
                 const loc = businessLocations[business.businessName];
-                return loc ? `${loc.address}, ${loc.city}, ${loc.state}` : '';
+                if (loc) return `${loc.address}, ${loc.city}, ${loc.state}`;
+                const j: any = rawMockBusiness as any;
+                const jl = j?.location;
+                return jl && jl.address && jl.city && jl.state ? `${jl.address}, ${jl.city}, ${jl.state}` : '';
               })()}
             </DialogDescription>
           </DialogHeader>
