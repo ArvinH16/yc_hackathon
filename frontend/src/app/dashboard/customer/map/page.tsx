@@ -11,12 +11,8 @@ import { getEffectiveCIConfig } from '@/lib/config';
 import { Collapsible } from '@/components/ui/collapsible';
 // Removed color mode selector; mode determines coloring
 
-const MapViewAI = dynamic(
-  () => import('@/components/dashboard/customer/MapViewAI').then((m) => m.MapViewAI),
-  { ssr: false }
-);
-const MapViewCompetitive = dynamic(
-  () => import('@/components/dashboard/customer/MapViewCompetitive').then((m) => m.MapViewCompetitive),
+const MapView = dynamic(
+  () => import('@/components/dashboard/customer/MapView').then((m) => m.MapView),
   { ssr: false }
 );
 
@@ -32,7 +28,7 @@ export default function CustomerMapPage() {
         <Card className="md:col-span-2">
           {/* Color mode derives from view mode; no manual selector */}
           <div className="h-[55vh] w-full rounded-lg md:h-[70vh]">
-            {mode === 'customer' ? <MapViewCompetitive /> : <MapViewAI />}
+            <MapView colorBy={legendMode} key={legendMode} />
           </div>
         </Card>
         <div className="md:col-span-1">
