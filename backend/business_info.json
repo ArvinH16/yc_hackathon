@@ -1,53 +1,55 @@
 {
-    "businessName": "Luxe Hair Studio & Salon",
-    "phone": "+12065734928",
-    "email": "hello@luxehairstudio.com",
-    "industry": "Hair Salon & Beauty Services",
+    "businessName": "Bright Smile Dental Care",
+    "phone": "+14252409986",
+    "email": "info@brightsmiledentalcare.com",
+    "industry": "Dental & Oral Healthcare",
     "services": [
-        "Women's haircut and styling",
-        "Men's haircut and grooming",
-        "Hair coloring and highlights",
-        "Balayage and ombre",
-        "Keratin treatments",
-        "Hair extensions",
-        "Bridal and special event styling",
-        "Deep conditioning treatments",
-        "Blowouts and styling"
+        "Routine dental exams and cleanings",
+        "Teeth whitening",
+        "Dental fillings and restorations",
+        "Root canal therapy",
+        "Dental crowns and bridges",
+        "Tooth extractions",
+        "Cosmetic dentistry",
+        "Dental implants",
+        "Orthodontics and braces",
+        "Emergency dental care"
     ],
     "prices": {
-        "womens_haircut": "$65-$95",
-        "mens_haircut": "$35-$50",
-        "full_color": "$120-$200",
-        "highlights": "$150-$250",
-        "balayage": "$180-$300",
-        "keratin_treatment": "$250-$400",
-        "hair_extensions": "$400-$800",
-        "blowout": "$45-$65",
-        "bridal_styling": "$150-$250",
-        "conditioning_treatment": "$40-$80"
+        "routine_exam_cleaning": "$120-$180",
+        "teeth_whitening": "$300-$600",
+        "dental_filling": "$150-$350",
+        "root_canal": "$800-$1500",
+        "dental_crown": "$1000-$2000",
+        "tooth_extraction": "$200-$400",
+        "dental_implant": "$3000-$5000",
+        "orthodontic_consultation": "$100-$200",
+        "emergency_visit": "$150-$300",
+        "deep_cleaning": "$250-$400"
     },
     "hours": {
-        "tuesday_friday": "9:00 AM - 7:00 PM",
-        "saturday": "9:00 AM - 6:00 PM",
-        "sunday": "10:00 AM - 5:00 PM",
-        "monday": "Closed"
+        "monday_friday": "8:00 AM - 6:00 PM",
+        "saturday": "9:00 AM - 2:00 PM",
+        "sunday": "Closed",
+        "emergency": "24/7 emergency line available"
     },
     "location": {
-        "address": "456 Fashion Avenue",
+        "address": "789 Medical Plaza Drive",
         "city": "Palo Alto",
         "state": "CA",
         "zip": "94301"
     },
-    "yearsInBusiness": 8,
+    "yearsInBusiness": 12,
     "licensed": true,
     "insured": true,
     "specializations": [
-        "Color correction",
-        "Curly hair specialist",
-        "Bridal hair",
-        "Luxury treatments"
+        "Cosmetic dentistry",
+        "Pediatric dentistry",
+        "Dental implants",
+        "Sedation dentistry",
+        "TMJ treatment"
     ],
-    "staff": 6,
+    "staff": 8,
     "bookingRequired": true,
-    "acceptsWalkIns": false
+    "acceptsWalkIns": true
 }
