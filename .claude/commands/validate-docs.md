@@ -66,33 +66,25 @@ Tasks:
 6. Return validation results with corrections
 ```
 
-**API & Routes Validator Agent:**
+**API & Routes Validator Agent (FastAPI):**
 ```
 Focus: Validate API endpoints and route definitions
-Input: List of API endpoints from documentation
+Input: Endpoints documented in docs/api/backend.md
 Tasks:
-1. Read current route definitions from:
-   - apps/api/src/routes/
-   - apps/api/src/controllers/
-   - apps/webapp/app/api/
-2. Compare documented endpoints with actual implementation
-3. Check HTTP methods match (GET, POST, etc.)
-4. Verify request/response schemas if documented
-5. Identify new endpoints not documented
-6. Return list of discrepancies and updates needed
+1. Read current route definitions from backend/server.py (FastAPI decorators like @app.post, @app.websocket)
+2. Extract paths, methods, and brief purpose
+3. Compare with docs/api/backend.md and backend/README.md
+4. Check HTTP methods, request/response examples, and env requirements
+5. Identify new/changed/removed endpoints not reflected in docs
+6. Return discrepancies and suggested updates
 ```
 
-**Database Schema Validator Agent:**
+**Database Schema Validator Agent (N/A here):**
 ```
-Focus: Verify database schemas and models
-Input: Database documentation references
+Focus: Skip unless a database is introduced
 Tasks:
-1. Read current schema from apps/api/src/db/schema.ts
-2. Compare with documented tables and fields
-3. Check for new tables or columns
-4. Verify relationships and constraints
-5. Validate migration references
-6. Return schema updates needed
+1. If a schema appears in the repo, add a new doc section
+2. Otherwise, mark as not applicable
 ```
 
 **Dependencies & Commands Validator Agent:**
@@ -100,7 +92,7 @@ Tasks:
 Focus: Validate package dependencies and CLI commands
 Input: List of dependencies and commands from docs
 Tasks:
-1. Check package.json files for mentioned dependencies
+1. Check frontend/package.json and backend/pyproject.toml for mentioned dependencies
 2. Verify version numbers if specified
 3. Test documented npm/npx commands for validity
 4. Check for deprecated packages
@@ -160,13 +152,13 @@ Tasks:
 5. Update configuration examples
 ```
 
-**CLAUDE.md Synchronization Agent:**
+**CLAUDE / AGENTS.md Synchronization Agent:**
 ```
-Focus: Ensure consistency with CLAUDE.md
+Focus: Ensure consistency with AGENTS.md and Claude commands
 Tasks:
-1. Read CLAUDE.md as source of truth
-2. Update other docs to match CLAUDE.md
-3. Propagate command changes
+1. Read AGENTS.md and .claude/commands/* as sources of truth
+2. Update other docs to match automation and rules
+3. Propagate command changes and references
 4. Sync environment setup instructions
 5. Ensure deployment procedures match
 ```
@@ -291,7 +283,7 @@ Handle optional arguments as $ARGUMENTS:
 ## Important Notes
 
 1. **Parallel Execution**: Always launch agents in parallel for speed
-2. **Source of Truth**: CLAUDE.md is authoritative for development setup
+2. **Source of Truth**: AGENTS.md is authoritative for LLM behavior and dev setup links
 3. **Preserve History**: Don't delete old information, mark as deprecated
 4. **Atomic Updates**: Use MultiEdit for multiple changes to same file
 5. **Verification**: Always verify changes don't break existing references

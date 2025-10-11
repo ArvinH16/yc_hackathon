@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Docs guard pre-commit hook
+
+scripts/docs-guard.sh
+
