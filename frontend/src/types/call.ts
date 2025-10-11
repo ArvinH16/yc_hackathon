@@ -1,6 +1,6 @@
 export interface CallTranscript {
   id: string;
-  businessId: string;
+  businessName: string;
   timestamp: string; // ISO date
   duration: number; // seconds
   transcript: string;
@@ -9,4 +9,3 @@ export interface CallTranscript {
   questionsAsked: string[];
   answersReceived: string[];
 }
-

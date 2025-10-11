@@ -1,5 +1,5 @@
 export interface CompanyProfile {
-  businessId: string;
+  businessName: string;
   tagline?: string;
   description: string; // What they do
   specialties?: string[];
@@ -19,4 +19,3 @@ export interface CompanyProfile {
   notes?: string[];
   defaultConfigId?: string;
 }
-

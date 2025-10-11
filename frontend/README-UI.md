@@ -16,9 +16,9 @@ This repo includes locally implemented primitives that do not require Radix or e
 
 ## Design Tokens
 
-Defined in `src/app/globals.css` (Tailwind v4 `@theme inline`).
+Defined in `src/app/globals.css` (Tailwind v4 `@theme inline`). Theme uses OKLCH tokens from shadcn/tweakcn (Claude theme) with light as default.
 
-- Colors
+- Colors (OKLCH)
   - `--background`, `--foreground`
   - `--muted`, `--muted-foreground`
   - `--card`, `--card-foreground`
@@ -29,10 +29,12 @@ Defined in `src/app/globals.css` (Tailwind v4 `@theme inline`).
   - `--accent`, `--accent-foreground`
   - `--destructive`, `--destructive-foreground`
   - `--ring`
+  - `--chart-1..5`
+  - `--sidebar*`
 - Radius
   - `--radius: 0.5rem` (used by components; tweak to change app-wide rounding)
 - Fonts
-  - `--font-sans`, `--font-mono` provided by Next Fonts in `layout.tsx`
+  - `--font-sans`, `--font-mono`, `--font-serif` tokens; Next Fonts may override by setting these variables.
 
 Dark mode tokens are defined on `.dark` and applied via the `ThemeProvider` which toggles the root `<html>` class.
 
@@ -77,4 +79,3 @@ Located in `src/components/layout`:
 ## Replacing With Official shadcn Components
 
 When network access is available, run the shadcn CLI to generate official components and replace local implementations one-by-one, keeping the same file paths and exports to avoid refactor churn.
-

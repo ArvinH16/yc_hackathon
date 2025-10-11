@@ -1,7 +1,7 @@
 import type { CompanyProfile } from "@/types/company";
 
 export const customerProfile: CompanyProfile = {
-  businessId: 'customer-1',
+  businessName: 'Your Salon Name',
   tagline: 'Modern color and cut specialists in SoMa',
   description:
     'Full-service salon focusing on balayage, precision cuts, and healthy hair treatments. We believe in accessible luxury and personalized care.',
@@ -33,18 +33,17 @@ export const customerProfile: CompanyProfile = {
 // Example competitor profile entries (optional usage)
 export const competitorProfiles: CompanyProfile[] = [
   {
-    businessId: 'comp-10',
+    businessName: 'Marina Glow Salon',
     tagline: 'Marina district glow-ups',
     description: 'Premium salon experience with blowouts and color refresh packages.',
     specialties: ['Blowouts', 'Color Refresh'],
     categories: ['Salon'],
   },
   {
-    businessId: 'comp-8',
+    businessName: 'Pacific Heights Aesthetics',
     tagline: 'Refined medical aesthetics',
     description: 'Boutique medspa specializing in injectables and fillers.',
     specialties: ['Botox', 'Filler'],
     categories: ['Medspa'],
   },
 ];
-

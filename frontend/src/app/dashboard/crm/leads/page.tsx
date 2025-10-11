@@ -15,18 +15,18 @@ import { getEffectiveCIConfig } from '@/lib/config';
 type Row = typeof mockLeads[number];
 
 export default function LeadsPage() {
-  const businessNameById = useMemo(() => new Map(mockCompetitors.map((b) => [b.id, b.name] as const)), []);
+  const businessByName = useMemo(() => new Map(mockCompetitors.map((b) => [b.businessName, b] as const)), []);
   const { mode } = useViewMode();
   const cfg = getEffectiveCIConfig(mode);
 
   const columns: ColumnDef<Row>[] = [
     {
       header: 'Business',
-      accessorKey: 'businessId',
+      accessorKey: 'businessName',
       cell: ({ row }) => {
-        const id = row.original.businessId;
-        const label = businessNameById.get(id) ?? id;
-        return <a href={`/dashboard/business/${encodeURIComponent(id)}`} className="text-primary underline">{label}</a>;
+        const name = row.original.businessName;
+        const label = businessByName.get(name)?.businessName ?? name;
+        return <a href={`/dashboard/business/${encodeURIComponent(name)}`} className="text-primary underline">{label}</a>;
       },
     },
     { header: 'Lead Score', accessorKey: 'leadScore', cell: ({ row }) => <div className="text-right">{row.original.leadScore}</div> },
