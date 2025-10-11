@@ -209,7 +209,10 @@ async def get_twiml(request: Request) -> HTMLResponse:
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     """Handle WebSocket connection from Twilio Media Streams."""
-    await websocket.accept()
+    requested_subprotocol = websocket.headers.get("sec-websocket-protocol")
+    subprotocol = requested_subprotocol.split(",")[0].strip() if requested_subprotocol else None
+
+    await websocket.accept(subprotocol=subprotocol)
     print("WebSocket connection accepted for outbound call")
 
     try:
