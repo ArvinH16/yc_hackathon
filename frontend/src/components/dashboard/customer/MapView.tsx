@@ -5,7 +5,6 @@ import {
   Circle,
   CircleMarker,
   MapContainer,
-  Marker,
   Popup,
   TileLayer,
 } from 'react-leaflet';
@@ -17,6 +16,7 @@ import { filterByRadius, getCompetitorColor } from '@/lib/utils';
 import type { Business } from '@/types/business';
 import { MapLegend } from './MapLegend';
 import { BusinessDetailModal } from './BusinessDetailModal';
+import { Button } from '@/components/ui/button';
 
 export function MapView() {
   const geo = useGeolocation();
@@ -39,7 +39,7 @@ export function MapView() {
   );
 
   return (
-    <div className="relative h-[calc(100vh-0px)] w-full">
+    <div className="relative h-full w-full">
       <MapContainer
         center={[center.lat, center.lng]}
         zoom={12}
@@ -95,12 +95,9 @@ export function MapView() {
                   <div>
                     {b.location.address}, {b.location.city}
                   </div>
-                  <button
-                    className="mt-1 rounded border px-2 py-1 text-xs hover:bg-zinc-100 dark:hover:bg-zinc-800"
-                    onClick={() => setSelected(b)}
-                  >
+                  <Button variant="outline" size="sm" className="mt-1 h-7 px-2 text-xs" onClick={() => setSelected(b)}>
                     View details
-                  </button>
+                  </Button>
                 </div>
               </Popup>
             </CircleMarker>
