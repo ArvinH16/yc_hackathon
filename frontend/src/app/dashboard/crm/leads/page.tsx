@@ -69,7 +69,7 @@ export default function LeadsPage() {
 
   return (
     <PageContainer>
-      <PageHeader title="Leads" />
+      <PageHeader title="Leads" description="Manage outreach and prioritize high-probability conversions." />
       <DataTable columns={columns} data={filtered} pageSize={cfg.crm?.defaultPageSize ?? 10} toolbar={toolbar} />
     </PageContainer>
   );

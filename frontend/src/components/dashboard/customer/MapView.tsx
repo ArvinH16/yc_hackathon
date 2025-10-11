@@ -26,6 +26,7 @@ type ColorMode = 'ai' | 'competitive';
 export function MapView({ colorBy = 'ai' }: { colorBy?: ColorMode }) {
   const geo = useGeolocation();
   const [selected, setSelected] = useState<SimplifiedBusiness | null>(null);
+  const [defaultTab, setDefaultTab] = useState<string | undefined>(undefined);
   
 
   const center = useMemo(() => {
@@ -111,9 +112,30 @@ export function MapView({ colorBy = 'ai' }: { colorBy?: ColorMode }) {
                     {loc.address}, {loc.city}
                   </div>
                   <div className="mt-2 flex items-center gap-2">
-                    <Button variant="outline" size="sm" className="h-7 px-2 text-xs" onClick={() => setSelected(b)}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-7 px-2 text-xs"
+                      onClick={() => {
+                        setDefaultTab(undefined);
+                        setSelected(b);
+                      }}
+                    >
                       Quick details
                     </Button>
+                    {mode === 'admin' && (
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        className="h-7 px-2 text-xs"
+                        onClick={() => {
+                          setDefaultTab('sales');
+                          setSelected(b);
+                        }}
+                      >
+                        Sales actions
+                      </Button>
+                    )}
                     <Link href={`/dashboard/business/${encodeURIComponent(b.businessName)}`}>
                       <Button variant="ghost" size="sm" className="h-7 px-2 text-xs">
                         Open profile
@@ -128,7 +150,14 @@ export function MapView({ colorBy = 'ai' }: { colorBy?: ColorMode }) {
       </MapContainer>
 
       {/* Modal */}
-      <BusinessDetailModal business={selected} onClose={() => setSelected(null)} />
+      <BusinessDetailModal
+        business={selected}
+        onClose={() => {
+          setSelected(null);
+          setDefaultTab(undefined);
+        }}
+        defaultTab={defaultTab}
+      />
     </div>
   );
 }

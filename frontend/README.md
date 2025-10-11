@@ -45,6 +45,22 @@ See `frontend/README-UI.md` for tokens, accessibility patterns, and component AP
 - Mark interactive components with `"use client"`
 - Prefer composing primitives over ad-hoc styles
 
+## View Modes
+
+The app supports two view modes toggled from the top navbar:
+
+- Salon View (`customer`):
+  - Map colors by competitive status and shows customer-focused details.
+  - Analytics shows Pricing Intelligence and Revenue Opportunities.
+  - Monitoring shows Price Trends.
+  - Business modal tabs: Overview, Competitive Edge.
+
+- BeamBell View (`admin`):
+  - Map colors by AI vs Human and adds a Sales Actions CTA in popups.
+  - Analytics shows Lead Insights (top conversion candidates) and AI Usage Overview.
+  - Monitoring shows AI Adoption and Outreach Activity by status.
+  - Business modal tabs: Overview, AI Analysis, Sales Actions.
+
 ## Learn More
 
 - Next.js docs: https://nextjs.org/docs

@@ -55,3 +55,8 @@ backend/uv.lock
 
 # Backend cache
 backend/__pycache__/
+
+# Allow specific helper file under frontend/src/lib
+!frontend/src/lib/selectors.ts
+# Keep Zone.Identifier streams ignored
+frontend/src/lib/*:Zone.Identifier

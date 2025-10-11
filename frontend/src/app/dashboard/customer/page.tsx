@@ -12,11 +12,13 @@ import rawMockBusiness from "@/data/mock/mockBusiness.json";
 import { customerProfile } from "@/data/mock/mockCompanyProfiles";
 import { defaultCIConfig } from "@/data/mock/mockCIConfig";
 import Link from "next/link";
+import { useViewMode } from "@/components/providers/view-mode-provider";
 
 export default function CustomerOverviewPage() {
   const biz = mockCustomerBusiness;
   const profile = customerProfile;
   const cfg = defaultCIConfig;
+  const { mode } = useViewMode();
 
   return (
     <PageContainer>
@@ -33,6 +35,8 @@ export default function CustomerOverviewPage() {
           </Link>
         </div>
       } />
+
+      <div className="mb-2 text-xs text-muted-foreground">You're viewing this from {mode === 'customer' ? 'Salon' : 'BeamBell'} view.</div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Card className="md:col-span-2">
