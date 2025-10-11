@@ -1,0 +1,127 @@
+"use client";
+
+import { useMemo, useState } from 'react';
+import {
+  Circle,
+  CircleMarker,
+  MapContainer,
+  Popup,
+  TileLayer,
+} from 'react-leaflet';
+
+import { mockCompetitors, mockCustomerBusiness } from '@/data/mock/mockBusinesses';
+import { useGeolocation } from '@/hooks/useGeolocation';
+import { MILES_TO_METERS } from '@/constants/colors';
+import { filterByRadius, getCompetitorColor } from '@/lib/utils';
+import type { Business } from '@/types/business';
+import { BusinessDetailModal } from './BusinessDetailModal';
+import { useViewMode } from '@/components/providers/view-mode-provider';
+import { getEffectiveCIConfig } from '@/lib/config';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+type ColorMode = 'ai' | 'competitive';
+
+export function MapView({ colorBy = 'ai' }: { colorBy?: ColorMode }) {
+  const geo = useGeolocation();
+  const [selected, setSelected] = useState<Business | null>(null);
+  
+
+  const center = useMemo(() => {
+    if (!geo.loading && geo.latitude && geo.longitude) {
+      return { lat: geo.latitude, lng: geo.longitude };
+    }
+    // Fallback to customer business location
+    return {
+      lat: mockCustomerBusiness.location.lat,
+      lng: mockCustomerBusiness.location.lng,
+    };
+  }, [geo.latitude, geo.longitude, geo.loading]);
+
+  const { mode } = useViewMode();
+  const cfg = getEffectiveCIConfig(mode);
+  const radiusMiles = cfg.searchRadiusMiles;
+  const inRadius = useMemo(
+    () => filterByRadius(mockCompetitors, center.lat, center.lng, radiusMiles),
+    [center.lat, center.lng, radiusMiles]
+  );
+
+  return (
+    <div className="relative h-full w-full">
+      <MapContainer
+        center={[center.lat, center.lng]}
+        zoom={12}
+        className="h-full w-full"
+        scrollWheelZoom
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+
+        {/* 10 mile radius */}
+        <Circle
+          center={[center.lat, center.lng]}
+          radius={radiusMiles * MILES_TO_METERS}
+          pathOptions={{ color: '#3b82f6', fillOpacity: 0.05 }}
+        />
+
+        {/* User location marker */}
+        {geo.latitude && geo.longitude && (
+          <CircleMarker
+            center={[geo.latitude, geo.longitude]}
+            radius={10}
+            pathOptions={{ color: '#2563eb', fillColor: '#2563eb', fillOpacity: 0.9 }}
+          >
+            <Popup>
+              <div className="text-sm">
+                <div className="font-medium">Your location</div>
+                <div>
+                  {geo.latitude.toFixed(4)}, {geo.longitude.toFixed(4)}
+                </div>
+              </div>
+            </Popup>
+          </CircleMarker>
+        )}
+
+        {/* Competitor markers */}
+        {inRadius.map((b) => {
+          const colorCfg = colorBy === 'ai' ? cfg : { ...cfg, aiTakesPrecedence: false };
+          const color = getCompetitorColor(b, mockCustomerBusiness, colorCfg);
+          return (
+            <CircleMarker
+              key={b.id}
+              center={[b.location.lat, b.location.lng]}
+              radius={8}
+              pathOptions={{ color, fillColor: color, fillOpacity: 0.9 }}
+              eventHandlers={{
+                click: () => setSelected(b),
+              }}
+            >
+              <Popup>
+                <div className="text-sm space-y-1">
+                  <div className="font-medium">{b.name}</div>
+                  <div>
+                    {b.location.address}, {b.location.city}
+                  </div>
+                  <div className="mt-2 flex items-center gap-2">
+                    <Button variant="outline" size="sm" className="h-7 px-2 text-xs" onClick={() => setSelected(b)}>
+                      Quick details
+                    </Button>
+                    <Link href={`/dashboard/business/${encodeURIComponent(b.id)}`}>
+                      <Button variant="ghost" size="sm" className="h-7 px-2 text-xs">
+                        Open profile
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </Popup>
+            </CircleMarker>
+          );
+        })}
+      </MapContainer>
+
+      {/* Modal */}
+      <BusinessDetailModal business={selected} onClose={() => setSelected(null)} />
+    </div>
+  );
+}
