@@ -43,7 +43,7 @@ export default function Home() {
       />
       {mode === 'admin' ? (
         <div className="mb-4">
-          <div className="mb-2 text-sm text-muted-foreground">BeamBell view — embedded run</div>
+          <div className="mb-2 text-sm text-muted-foreground">BeamBell AI demo — embedded preview</div>
           <div className="overflow-hidden rounded-md border h-[70vh]">
             <iframe
               src="https://app.coval.dev/beambell/runs/buxXcfdhyKtzufnWsTgFFU"
@@ -63,15 +63,16 @@ export default function Home() {
               href="https://app.coval.dev/beambell/runs/buxXcfdhyKtzufnWsTgFFU"
               target="_blank"
               rel="noreferrer"
+              aria-label="Open BeamBell AI demo run in a new tab (Coval)"
               className="inline-flex"
             >
-              <Button variant="outline">Open run in new tab</Button>
+              <Button variant="outline">Open BeamBell AI Demo</Button>
             </a>
             <Button
               variant="ghost"
               onClick={() => navigator.clipboard?.writeText('https://app.coval.dev/beambell/runs/buxXcfdhyKtzufnWsTgFFU')}
             >
-              Copy link
+              Copy demo link
             </Button>
           </div>
         </div>
@@ -80,8 +81,8 @@ export default function Home() {
           <div className="mb-2 text-sm text-muted-foreground">You're in Salon view. Switch to BeamBell view to see the embedded run.</div>
           <div className="flex gap-2">
             <Button variant="secondary" onClick={() => setMode('admin')}>Switch to BeamBell view</Button>
-            <a href="https://app.coval.dev/beambell/runs/buxXcfdhyKtzufnWsTgFFU" target="_blank" rel="noreferrer" className="inline-flex">
-              <Button variant="outline">Open run in new tab</Button>
+            <a href="https://app.coval.dev/beambell/runs/buxXcfdhyKtzufnWsTgFFU" target="_blank" rel="noreferrer" aria-label="Open BeamBell AI demo run in a new tab (Coval)" className="inline-flex">
+              <Button variant="outline">Open BeamBell AI Demo</Button>
             </a>
           </div>
         </div>
