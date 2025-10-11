@@ -43,22 +43,22 @@ export default function Home() {
       />
       {mode === 'admin' ? (
         <div className="mb-4">
-          <div className="mb-2 text-sm text-muted-foreground">BeamBell AI demo</div>
+          <div className="mb-2 text-sm text-muted-foreground">AI Agent Evaluation (Coval)</div>
           <div className="flex gap-2">
             <a
               href="https://app.coval.dev/beambell/runs/buxXcfdhyKtzufnWsTgFFU"
               target="_blank"
               rel="noreferrer"
-              aria-label="Open BeamBell AI demo run in a new tab (Coval)"
+              aria-label="Open AI Agent Evaluation (Coval) in a new tab"
               className="inline-flex"
             >
-              <Button variant="outline">Open BeamBell AI Demo</Button>
+              <Button variant="outline">Open AI Agent Evaluation</Button>
             </a>
             <Button
               variant="ghost"
               onClick={() => navigator.clipboard?.writeText('https://app.coval.dev/beambell/runs/buxXcfdhyKtzufnWsTgFFU')}
             >
-              Copy demo link
+              Copy evaluation link
             </Button>
           </div>
         </div>
