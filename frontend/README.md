@@ -60,7 +60,7 @@ The app supports two view modes toggled from the top navbar:
   - Analytics shows Lead Insights (top conversion candidates) and AI Usage Overview.
   - Monitoring shows AI Adoption and Outreach Activity by status.
   - Business modal tabs: Overview, AI Analysis, Sales Actions.
-  - Home shows an embedded BeamBell AI demo (Coval) with clear actions to open in a new tab or copy the demo link.
+- Home links to the BeamBell AI demo (Coval) with clear actions to open in a new tab or copy the demo link.
 
 ## Learn More
 

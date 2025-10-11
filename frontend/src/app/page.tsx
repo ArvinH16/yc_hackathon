@@ -43,22 +43,8 @@ export default function Home() {
       />
       {mode === 'admin' ? (
         <div className="mb-4">
-          <div className="mb-2 text-sm text-muted-foreground">BeamBell AI demo — embedded preview</div>
-          <div className="overflow-hidden rounded-md border h-[70vh]">
-            <iframe
-              src="https://app.coval.dev/beambell/runs/buxXcfdhyKtzufnWsTgFFU"
-              title="BeamBell Coval Run"
-              className="w-full h-full"
-              frameBorder={0}
-              loading="lazy"
-              allow="clipboard-write; fullscreen; autoplay"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
-          </div>
-          <div className="mt-2 text-xs text-muted-foreground">
-            If you see “refused to connect”, the site blocks embedding. Use the buttons below.
-          </div>
-          <div className="mt-2 flex gap-2">
+          <div className="mb-2 text-sm text-muted-foreground">BeamBell AI demo</div>
+          <div className="flex gap-2">
             <a
               href="https://app.coval.dev/beambell/runs/buxXcfdhyKtzufnWsTgFFU"
               target="_blank"
