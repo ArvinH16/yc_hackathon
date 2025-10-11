@@ -1,45 +1,54 @@
 "use client";
 
 import { mockTrends } from '@/data/mock/mockTrends';
+import { PageContainer } from '@/components/layout/PageContainer';
+import { PageHeader } from '@/components/layout/PageHeader';
+import { Card, CardContent } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 export default function CustomerMonitoringPage() {
   return (
-    <div className="mx-auto max-w-5xl p-6 space-y-6">
-      <h1 className="text-2xl font-semibold">Market Monitoring</h1>
+    <PageContainer>
+      <PageHeader title="Market Monitoring" />
 
       <section className="space-y-2">
         <h2 className="text-xl font-medium">Price Trends</h2>
-        <div className="overflow-x-auto rounded-md border">
-          <table className="min-w-full text-sm">
-            <thead className="bg-zinc-50 dark:bg-zinc-900/50">
-              <tr>
-                <th className="px-3 py-2 text-left">Service</th>
-                <th className="px-3 py-2 text-left">Trend</th>
-                <th className="px-3 py-2 text-right">% Change</th>
-                <th className="px-3 py-2 text-right">Latest Avg</th>
-              </tr>
-            </thead>
-            <tbody>
-              {mockTrends.map((t) => {
-                const latest = t.data[t.data.length - 1];
-                return (
-                  <tr key={t.serviceName} className="border-t">
-                    <td className="px-3 py-2">{t.serviceName}</td>
-                    <td className="px-3 py-2 capitalize">{t.trend}</td>
-                    <td className="px-3 py-2 text-right">{t.percentageChange}%</td>
-                    <td className="px-3 py-2 text-right">${latest.averagePrice}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+        <Card>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Service</TableHead>
+                    <TableHead>Trend</TableHead>
+                    <TableHead className="text-right">% Change</TableHead>
+                    <TableHead className="text-right">Latest Avg</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {mockTrends.map((t) => {
+                    const latest = t.data[t.data.length - 1];
+                    return (
+                      <TableRow key={t.serviceName}>
+                        <TableCell>{t.serviceName}</TableCell>
+                        <TableCell className="capitalize">{t.trend}</TableCell>
+                        <TableCell className="text-right">{t.percentageChange}%</TableCell>
+                        <TableCell className="text-right">${latest.averagePrice}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
       </section>
 
-      <section className="rounded-md border p-4 text-sm text-zinc-600 dark:text-zinc-300">
-        Alerts and competitor timeline coming soon.
-      </section>
-    </div>
+      <Card className="mt-6">
+        <CardContent className="p-4 text-sm text-muted-foreground">
+          Alerts and competitor timeline coming soon.
+        </CardContent>
+      </Card>
+    </PageContainer>
   );
 }
-
