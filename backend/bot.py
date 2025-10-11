@@ -76,7 +76,7 @@ async def run_bot(transport: BaseTransport, handle_sigint: bool):
 
     @llm.event_handler("on_function_calls_started")
     async def on_function_calls_started(service, function_calls):
-        await tts.queue_frame(TTSSpeakFrame("Let me analyze that for you."))
+        pass
 
     # Define the AI detection function schema
     ai_detection_function = FunctionSchema(
