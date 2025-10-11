@@ -20,6 +20,8 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from twilio.rest import Client as TwilioClient
 from twilio.twiml.voice_response import Connect, Stream, VoiceResponse
 
+from prompt_generator import get_custom_prompt, load_business_info
+
 load_dotenv(override=True)
 
 # In-memory store for body data by call SID
@@ -106,18 +108,41 @@ async def initiate_outbound_call(request: Request) -> JSONResponse:
     try:
         data = await request.json()
 
-        # Validate request data
-        if not data.get("phone_number"):
-            raise HTTPException(
-                status_code=400, detail="Missing 'phone_number' in the request body"
-            )
+        # Load business information
+        business_info = load_business_info()
 
-        # Extract the phone number to dial
-        phone_number = str(data["phone_number"])
+        # Extract phone number from request or use the one from business_info
+        phone_number = data.get("phone_number")
+        if not phone_number:
+            phone_number = business_info.get("phone")
+            if not phone_number:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Missing 'phone_number' in request or business_info.json"
+                )
+
+        phone_number = str(phone_number)
         print(f"Processing outbound call to {phone_number}")
+        print(f"Target business: {business_info.get('businessName', 'Unknown')}")
 
-        # Extract body data if provided
+        # Generate custom prompt using Gemini
+        print("Generating custom prompt with Gemini AI...")
+        try:
+            custom_prompt = get_custom_prompt()
+            print(f"Custom prompt generated ({len(custom_prompt)} characters)")
+        except Exception as e:
+            print(f"Warning: Failed to generate custom prompt: {e}")
+            custom_prompt = None
+
+        # Extract body data if provided, or initialize empty dict
         body_data = data.get("body", {})
+
+        # Add the custom prompt to body data
+        if custom_prompt:
+            body_data["system_prompt"] = custom_prompt
+
+        # Add business name for reference
+        body_data["business_name"] = business_info.get("businessName", "Unknown")
 
         # Get server URL for TwiML webhook
         host = request.headers.get("host")

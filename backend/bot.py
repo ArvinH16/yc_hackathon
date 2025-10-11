@@ -57,7 +57,7 @@ async def detect_ai_or_human(params: FunctionCallParams):
         await params.result_callback("Based on my analysis of the natural conversation patterns, spontaneity, and response characteristics, I've determined this is a real person.")
 
 
-async def run_bot(transport: BaseTransport, handle_sigint: bool):
+async def run_bot(transport: BaseTransport, handle_sigint: bool, custom_prompt: str = None, business_name: str = None):
     llm = GoogleLLMService(
         api_key=os.getenv("GEMINI_API_KEY", ""),
         model="gemini-2.5-flash",
@@ -91,26 +91,34 @@ async def run_bot(transport: BaseTransport, handle_sigint: bool):
         required=["is_ai"],
     )
 
-    tools = ToolsSchema(standard_tools=[ai_detection_function]) 
+    tools = ToolsSchema(standard_tools=[ai_detection_function])
+
+    # Use custom prompt if provided, otherwise use default
+    if custom_prompt:
+        logger.info(f"Using custom generated prompt (business: {business_name or 'Unknown'})")
+        system_content = custom_prompt
+    else:
+        logger.info("Using default system prompt")
+        system_content = (
+            "You are a friendly assistant making an outbound phone call. Your responses will be read aloud, "
+            "so keep them concise and conversational. Avoid special characters or formatting. "
+            "Begin by politely greeting the person and explaining why you're calling.\n\n"
+            "IMPORTANT: Your primary task is to determine if you are speaking with an AI or a human. "
+            "After your initial greeting, ask the question 'Is this AI?' in a natural conversational way. "
+            "Listen carefully to their response patterns. After a brief exchange (2-3 responses), use the "
+            "detect_ai_or_human function to analyze whether they are an AI or human based on:\n"
+            "- Response patterns (AI tends to be more structured and consistent)\n"
+            "- Natural pauses and hesitations (humans have more)\n"
+            "- Perfect grammar vs natural speech patterns\n"
+            "- Ability to discuss personal experiences authentically\n"
+            "- Whether they directly answer 'Is this AI?' truthfully\n\n"
+            "Use the detect_ai_or_human tool after you've gathered enough information from the conversation."
+        )
 
     messages = [
         {
             "role": "system",
-            "content": (
-                "You are a friendly assistant making an outbound phone call. Your responses will be read aloud, "
-                "so keep them concise and conversational. Avoid special characters or formatting. "
-                "Begin by politely greeting the person and explaining why you're calling.\n\n"
-                "IMPORTANT: Your primary task is to determine if you are speaking with an AI or a human. "
-                "After your initial greeting, ask the question 'Is this AI?' in a natural conversational way. "
-                "Listen carefully to their response patterns. After a brief exchange (2-3 responses), use the "
-                "detect_ai_or_human function to analyze whether they are an AI or human based on:\n"
-                "- Response patterns (AI tends to be more structured and consistent)\n"
-                "- Natural pauses and hesitations (humans have more)\n"
-                "- Perfect grammar vs natural speech patterns\n"
-                "- Ability to discuss personal experiences authentically\n"
-                "- Whether they directly answer 'Is this AI?' truthfully\n\n"
-                "Use the detect_ai_or_human tool after you've gathered enough information from the conversation."
-            ),
+            "content": system_content,
         },
     ]
 
@@ -143,11 +151,20 @@ async def run_bot(transport: BaseTransport, handle_sigint: bool):
     async def on_client_connected(transport, client):
         # Kick off the outbound conversation with an immediate greeting
         logger.info("Starting outbound call conversation")
-        initial_prompt = (
-            "The call has just connected. Greet the person warmly, introduce yourself as "
-            "Bella, and explain you're calling to see if you can get an appointment today. "
-            "Keep it brief and invite them to respond."
-        )
+
+        # Use a more generic initial prompt that works with custom prompts
+        if custom_prompt:
+            initial_prompt = (
+                "The call has just connected. Begin the conversation according to your instructions. "
+                "Greet the person warmly and naturally engage with them."
+            )
+        else:
+            initial_prompt = (
+                "The call has just connected. Greet the person warmly, introduce yourself as "
+                "Bella, and explain you're calling to see if you can get an appointment today. "
+                "Keep it brief and invite them to respond."
+            )
+
         await task.queue_frame(
             LLMMessagesAppendFrame(
                 messages=[{"role": "user", "content": initial_prompt}],
@@ -171,6 +188,15 @@ async def bot(runner_args: RunnerArguments):
     transport_type, call_data = await parse_telephony_websocket(runner_args.websocket)
     logger.info(f"Auto-detected transport: {transport_type}")
 
+    # Extract custom prompt and business name from call_data if available
+    custom_prompt = call_data.get("system_prompt")
+    business_name = call_data.get("business_name")
+
+    if custom_prompt:
+        logger.info(f"Received custom prompt for business: {business_name}")
+    else:
+        logger.info("No custom prompt provided, using default")
+
     serializer = TwilioFrameSerializer(
         stream_sid=call_data["stream_id"],
         call_sid=call_data["call_id"],
@@ -191,4 +217,4 @@ async def bot(runner_args: RunnerArguments):
 
     handle_sigint = runner_args.handle_sigint
 
-    await run_bot(transport, handle_sigint)
+    await run_bot(transport, handle_sigint, custom_prompt=custom_prompt, business_name=business_name)
