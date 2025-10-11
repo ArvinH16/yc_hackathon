@@ -9,7 +9,7 @@ import { useViewMode } from '@/components/providers/view-mode-provider';
 
 export default function Home() {
   const { toast } = useToast();
-  const { mode } = useViewMode();
+  const { mode, setMode } = useViewMode();
   const linksBase = [
     { href: '/dashboard/customer/map', title: 'Map', desc: 'Competitor map with 10-mile radius' },
     { href: '/dashboard/customer/analytics', title: 'Analytics', desc: 'Pricing intelligence and opportunities' },
@@ -41,7 +41,7 @@ export default function Home() {
           </div>
         )}
       />
-      {mode === 'admin' && (
+      {mode === 'admin' ? (
         <div className="mb-4">
           <div className="mb-2 text-sm text-muted-foreground">BeamBell view — embedded run</div>
           <div className="overflow-hidden rounded-md border h-[70vh]">
@@ -51,8 +51,19 @@ export default function Home() {
               className="w-full h-full"
               frameBorder={0}
               loading="lazy"
+              allow="clipboard-write; fullscreen; autoplay"
               referrerPolicy="no-referrer-when-downgrade"
             />
+          </div>
+        </div>
+      ) : (
+        <div className="mb-4">
+          <div className="mb-2 text-sm text-muted-foreground">You're in Salon view. Switch to BeamBell view to see the embedded run.</div>
+          <div className="flex gap-2">
+            <Button variant="secondary" onClick={() => setMode('admin')}>Switch to BeamBell view</Button>
+            <a href="https://app.coval.dev/beambell/runs/buxXcfdhyKtzufnWsTgFFU" target="_blank" rel="noreferrer" className="inline-flex">
+              <Button variant="outline">Open run in new tab</Button>
+            </a>
           </div>
         </div>
       )}
