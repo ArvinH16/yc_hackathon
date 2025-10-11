@@ -62,17 +62,7 @@ export default function Home() {
             </Button>
           </div>
         </div>
-      ) : (
-        <div className="mb-4">
-          <div className="mb-2 text-sm text-muted-foreground">You're in Salon view. Switch to BeamBell view to see the embedded run.</div>
-          <div className="flex gap-2">
-            <Button variant="secondary" onClick={() => setMode('admin')}>Switch to BeamBell view</Button>
-            <a href="https://app.coval.dev/beambell/runs/buxXcfdhyKtzufnWsTgFFU" target="_blank" rel="noreferrer" aria-label="Open BeamBell AI demo run in a new tab (Coval)" className="inline-flex">
-              <Button variant="outline">Open BeamBell AI Demo</Button>
-            </a>
-          </div>
-        </div>
-      )}
+      ) : null}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {links.map((l) => (
           <Card key={l.href}>
