@@ -4,7 +4,7 @@ Context: BeamBell is our broader product effort (separate repo) at https://www.b
 
 For salons: the dashboard shows a competitor map within a 50-mile radius, extracted service menus with normalized prices, pricing benchmarks and revenue opportunities, AI adoption flags, trend monitoring, and an Agent Evaluation panel powered by Coval.
 
-![System Architecture](Screenshot%202025-10-11%20at%205.33.58%20PM.png)
+![System Architecture](arch.png)
 
 ## 1) What is this?
 
