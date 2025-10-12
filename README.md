@@ -34,4 +34,5 @@ It was our first time using Coval; their team was kind and hands‑on, helped us
 
 ## 7) [ Optional but highly recommended ]. A live link so we can try out your project.
 
-Live link: <ADD_LIVE_URL>. If this stays private for judging, you can run locally: follow `backend/README.md` and `docs/api/backend.md`, add credentials, start the FastAPI server and the frontend, trigger an outbound call, and watch the extracted services/prices and the AI check in the UI.
+Live link: https://drive.google.com/drive/folders/13eHz7L9Z-gndAxLkn0Acd7SsTgCQ7Fns?usp=sharing
+
