@@ -12,7 +12,7 @@ An AI‑powered competitive intelligence add‑on for BeamBell. It automatically
 
 ## 2) A video, less than 60 seconds long. (Ideally this is a demo and not you saying the same thing as section 1. Seriously, less than 60 seconds. Really, I mean it. Less than 60 seconds.)
 
-Video link: <ADD_LINK_HERE>. The recording shows: starting an outbound call, the agent asking about offerings and prices, quick clarifications on ranges/packages, the casual AI check near the end, and the final summary. Keep it under a minute.
+Video link: https://drive.google.com/drive/folders/13eHz7L9Z-gndAxLkn0Acd7SsTgCQ7Fns?usp=sharing
 
 ## 3) Describe how you used Gemini models and Pipecat. (You must use both Gemini models and Pipecat in this hackathon.)
 
