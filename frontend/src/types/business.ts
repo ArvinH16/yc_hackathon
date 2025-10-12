@@ -1,4 +1,4 @@
-export type BusinessType = 'salon' | 'medspa' | 'barber' | 'spa' | 'hair' | 'nails';
+export type BusinessType = 'salon' | 'spa' | 'barber' | 'medspa';
 
 // Simplified business model for mock/frontend usage
 export interface SimplifiedBusiness {
