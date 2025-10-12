@@ -2,13 +2,19 @@ import type { SimplifiedBusiness, BusinessType } from '@/types/business';
 import type { CustomerBusiness } from '@/types/user';
 import rawMockBusiness from './mockBusiness.json';
 
+// NOTE: Make sure your '@/types/business' BusinessType is:
+// export type BusinessType = 'salon' | 'medspa' | 'barber' | 'spa' | 'hair' | 'nails';
+// If not, update it accordingly to fix type errors for 'hair' and 'nails'.
+
 // Helper: map free-form industry string to our BusinessType
 function mapIndustryToType(industry?: string): BusinessType {
   const s = (industry || '').toLowerCase();
   if (s.includes('med') || s.includes('aesthetic') || s.includes('inject')) return 'medspa';
   if (s.includes('barber')) return 'barber';
   if (s.includes('spa')) return 'spa';
-  if (s.includes('salon') || s.includes('hair')) return 'salon';
+  if (s.includes('salon')) return 'salon';
+  if (s.includes('hair')) return 'hair';
+  if (s.includes('nail')) return 'nails';
   return 'salon';
 }
 
@@ -39,7 +45,7 @@ const priceKeyToServiceName: Record<string, string> = {
 // Build a CustomerBusiness from JSON with safe fallbacks to existing mock if needed
 function buildCustomerFromJson(): CustomerBusiness | null {
   try {
-    const j: any = rawMockBusiness as any;
+    const j = rawMockBusiness as Record<string, unknown>;
     if (!j || typeof j !== 'object') return null;
 
     // Compose prices mapped to our service display names
@@ -52,15 +58,15 @@ function buildCustomerFromJson(): CustomerBusiness | null {
       }
     }
 
-    const services: string[] = Array.isArray(j.services) && j.services.length > 0
-      ? j.services
+    const services: string[] = Array.isArray(j.services) && (j.services as string[]).length > 0
+      ? (j.services as string[])
       : Object.keys(prices);
 
     const cb: CustomerBusiness = {
-      businessName: j.businessName || 'Your Salon Name',
-      phone: j.phone || '(415) 555-0200',
-      email: j.email || undefined,
-      industry: mapIndustryToType(j.industry),
+      businessName: (j.businessName as string) || 'Your Salon Name',
+      phone: (j.phone as string) || '(415) 555-0200',
+      email: (j.email as string) || undefined,
+      industry: mapIndustryToType(j.industry as string),
       services,
       prices: prices,
       // Fallbacks for fields not present in provided JSON
@@ -78,111 +84,152 @@ function buildCustomerFromJson(): CustomerBusiness | null {
 
 export const mockCompetitors: SimplifiedBusiness[] = [
   {
-    businessName: 'Luxe Hair Studio',
-    phone: '(415) 555-0101',
-    email: 'info@luxehairstudio.com',
-    industry: 'salon',
-    services: ["Women's Haircut", 'Balayage', 'Keratin Treatment'],
-    prices: { "Women's Haircut": 85, Balayage: 250, 'Keratin Treatment': 350 },
+    businessName: 'CODE Salon',
+    phone: '(347) 925-8225',
+    industry: 'hair',
+    services: ['Haircut', 'Color', 'Extensions'],
+    prices: {}
   },
   {
-    businessName: 'Mission Cuts',
-    phone: '(415) 555-0102',
-    industry: 'barber',
-    services: ["Men's Haircut", 'Beard Trim'],
-    prices: { "Men's Haircut": 45, 'Beard Trim': 20 },
+    businessName: 'Patrick Evan Hair Salon',
+    phone: '(415) 421-1111',
+    industry: 'hair',
+    services: ['Haircut', 'Color', 'Japanese Straightening'],
+    prices: {}
   },
   {
-    businessName: 'SoMa Spa & Wellness',
-    phone: '(415) 555-0103',
+    businessName: 'Hector Estrada',
+    phone: '(415) 955-7028',
+    industry: 'hair',
+    services: ['Haircut', 'Color', 'Styling'],
+    prices: {}
+  },
+  {
+    businessName: 'Arthur Sebastian Hair Salon',
+    phone: '(415) 501-0338',
+    industry: 'hair',
+    services: ['Haircut', 'Color', 'Brazilian Blowout'],
+    prices: {}
+  },
+  {
+    businessName: 'Taylor Monroe',
+    phone: '(855) 729-9705',
+    industry: 'hair',
+    services: ['Haircut', 'Balayage', 'Gray Blending'],
+    prices: {}
+  },
+  {
+    businessName: 'Hue Hair Salon',
+    phone: '(415) 876-1608)',
+    industry: 'hair',
+    services: ['Haircut', 'Color', 'Japanese Hair Straightening'],
+    prices: { "Women’s Haircut": 125, "Men’s Haircut": 65, "Japanese Hair Straightening": 350 }
+  },
+  {
+    businessName: 'The Color Design Salon',
+    phone: '(415) 984-1926',
+    industry: 'hair',
+    services: ['Haircut', 'Color', 'Styling'],
+    prices: {}
+  },
+  {
+    businessName: 'Blake Charles Salon',
+    phone: '(415) 433-3030',
+    industry: 'hair',
+    services: ['Haircut', 'Color', 'Skincare'],
+    prices: {}
+  },
+  {
+    businessName: 'Spectrum Nails Spa (California St)',
+    phone: '(415) 483-5028',
+    industry: 'nails',
+    services: ['Manicure', 'Pedicure', 'Gel Pedicure'],
+    prices: { Manicure: 30, Pedicure: 40, "Gel Pedicure": 60 }
+  },
+  {
+    businessName: 'Gentle Nails Salon',
+    phone: '(415) 702-6559',
+    industry: 'nails',
+    services: ['Manicure', 'Pedicure', 'Gel Manicure'],
+    prices: {}
+  },
+  {
+    businessName: 'Pearly Nails',
+    phone: '(415) 567-2866',
+    industry: 'nails',
+    services: ['Manicure', 'Pedicure', 'Gel Manicure'],
+    prices: {}
+  },
+  {
+    businessName: 'Q Spa (Divisadero)',
+    phone: '(415) 885-1272',
+    industry: 'nails',
+    services: ['Basic Mani', 'Basic Pedi', 'Gel Mani'],
+    prices: { "Basic Mani": 30, "Basic Pedi": 38, "Gel Mani": 50 }
+  },
+  {
+    businessName: 'SF Nail Spa',
+    phone: '(415) 564-5581',
+    industry: 'nails',
+    services: ['Manicure', 'Pedicure', 'Gel Manicure'],
+    prices: {}
+  },
+  {
+    businessName: 'Aquatica Nails',
+    phone: '(415) 422-0448',
+    industry: 'nails',
+    services: ['Manicure', 'Pedicure', 'Gel X'],
+    prices: {}
+  },
+  {
+    businessName: 'Glitz N Glam Nail & Lash Spa',
+    phone: '(415) 702-6485',
+    industry: 'nails',
+    services: ['Manicure', 'Pedicure', 'Lash Extensions'],
+    prices: {}
+  },
+  {
+    businessName: 'Pearl Spa & Sauna (Japantown)',
+    phone: '(415) 580-7142',
     industry: 'spa',
-    services: ['Swedish Massage', 'Deep Tissue'],
-    prices: { 'Swedish Massage': 120, 'Deep Tissue': 140 },
+    services: ['Korean Spa', 'Sauna', 'Body Scrub'],
+    prices: {}
   },
   {
-    businessName: 'Bay Beauty MedSpa',
-    phone: '(415) 555-0104',
-    industry: 'medspa',
-    services: ['Botox', 'HydraFacial'],
-    prices: { Botox: 300, HydraFacial: 220 },
-  },
-  {
-    businessName: 'Sunset Styles',
-    phone: '(415) 555-0105',
-    industry: 'salon',
-    services: ["Women's Haircut", 'Balayage'],
-    prices: { "Women's Haircut": 70, Balayage: 210 },
-  },
-  {
-    businessName: 'Nob Hill Nails & Spa',
-    phone: '(415) 555-0106',
+    businessName: 'Kabuki Springs & Spa',
+    phone: '(415) 922-6000)',
     industry: 'spa',
-    services: ['Manicure', 'Pedicure'],
-    prices: { Manicure: 28, Pedicure: 40 },
+    services: ['Communal Bath', 'Massage', 'Body Treatments'],
+    prices: { "Communal Bath": 49 }
   },
   {
-    businessName: 'Castro Cuts',
-    phone: '(415) 555-0107',
-    industry: 'barber',
-    services: ["Men's Haircut", 'Beard Trim'],
-    prices: { "Men's Haircut": 50, 'Beard Trim': 22 },
-  },
-  {
-    businessName: 'Pacific Heights Aesthetics',
-    phone: '(415) 555-0108',
-    industry: 'medspa',
-    services: ['Botox', 'Filler'],
-    prices: { Botox: 320, Filler: 550 },
-  },
-  {
-    businessName: 'Tenderloin Thai Massage',
-    phone: '(415) 555-0109',
+    businessName: 'Redmint (Marina)',
+    phone: '(415) 888-8693',
     industry: 'spa',
-    services: ['Thai Massage', 'Foot Reflexology'],
-    prices: { 'Thai Massage': 110, 'Foot Reflexology': 60 },
+    services: ['Acupuncture', 'Herbal Medicine', 'Facials'],
+    prices: {}
   },
   {
-    businessName: 'Marina Glow Salon',
-    phone: '(415) 555-0110',
-    industry: 'salon',
-    services: ["Women's Haircut", 'Color Refresh'],
-    prices: { "Women's Haircut": 88, 'Color Refresh': 160 },
-  },
-  {
-    businessName: 'Downtown Barber Co.',
-    phone: '(415) 555-0111',
-    industry: 'barber',
-    services: ["Men's Haircut", 'Shave'],
-    prices: { "Men's Haircut": 55, Shave: 35 },
-  },
-  {
-    businessName: 'Mission Med Aesthetics',
-    phone: '(415) 555-0112',
-    industry: 'medspa',
-    services: ['HydraFacial', 'Microneedling'],
-    prices: { HydraFacial: 230, Microneedling: 300 },
-  },
-  {
-    businessName: 'Ocean Avenue Salon',
-    phone: '(415) 555-0113',
-    industry: 'salon',
-    services: ["Women's Haircut", 'Blowout'],
-    prices: { "Women's Haircut": 65, Blowout: 55 },
-  },
-  {
-    businessName: 'Hayes Valley Spa',
-    phone: '(415) 555-0114',
+    businessName: 'Archimedes Banya',
+    phone: '(415) 206-9000',
     industry: 'spa',
-    services: ['Swedish Massage', 'Facial'],
-    prices: { 'Swedish Massage': 125, Facial: 120 },
+    services: ['Banya', 'Sauna', 'Body Treatments'],
+    prices: {}
   },
   {
-    businessName: 'Richmond Relax Spa',
-    phone: '(415) 555-0115',
+    businessName: 'SenSpa (Presidio)',
+    phone: '(415) 441-1777',
     industry: 'spa',
-    services: ['Deep Tissue', 'Hot Stone'],
-    prices: { 'Deep Tissue': 145, 'Hot Stone': 160 },
+    services: ['Massage', 'Facials', 'Infrared Sauna'],
+    prices: {}
   },
+  {
+    businessName: 'Mysa Day Spa (West Portal)',
+    phone: '(415) 742-5491',
+    industry: 'spa',
+    services: ['Massage', 'Facials', 'Waxing'],
+    prices: {}
+  }
 ];
 
 // Existing fallback in case JSON is missing fields we need
