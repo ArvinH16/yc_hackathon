@@ -1,6 +1,6 @@
 # YC Hackathon Project
 
-Context: BeamBell is our broader product effort (separate repo) at https://www.beambell.com. BeamBell offers two AI services: AI Concierge: a personal, phone‑based assistant with 30 free minutes monthly for registered users; and AI Receptionist: a 24/7 business solution that answers calls, books appointments, and handles inquiries with calendar/CRM integrations. This hackathon project was built in isolation from those codebases to focus on outbound information gathering (offerings and pricing) and lightweight AI/human detection.
+Context: BeamBell is our broader product effort (separate repo) at https://www.beambell.com. BeamBell offers two AI services: AI Concierge: a personal, phone‑based assistant with 30 free minutes monthly for registered users; and AI Receptionist: a 24/7 business solution that answers calls, books appointments, and handles inquiries with calendar/CRM integrations. This hackathon project was built in isolation from those codebases to focus on salons: outbound information gathering (offerings and pricing), lightweight AI/human detection, and competitive intelligence that powers the salon dashboards.
 
 For salons: the dashboard shows a competitor map within a 50-mile radius, extracted service menus with normalized prices, pricing benchmarks and revenue opportunities, AI adoption flags, trend monitoring, and an Agent Evaluation panel powered by Coval.
 
