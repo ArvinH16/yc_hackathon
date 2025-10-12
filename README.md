@@ -32,7 +32,5 @@ We stood up the outbound call flow end‑to‑end (`/start` and `/twiml`), built
 
 It was our first time using Coval; their team was kind and hands‑on, helped us get started quickly, and made sure we evaluated the agent correctly; this shortened the loop from test sets to metrics and dashboards. The Pipecat team shared practical cookbooks and recipes that let us assemble the full agentic system quickly; that guidance was extremely helpful. Technically, Pipecat’s pipeline ergonomics made the streaming graph easy to reason about; Deepgram’s latency/accuracy supported natural turn‑taking; ElevenLabs produced consistent voice quality at 8 kHz; Twilio’s Media Streams behaved predictably in both local and Pipecat Cloud routing. We’ll add sharper numbers after more runs.
 
-## 7) [ Optional but highly recommended ]. A live link so we can try out your project.
-
-Live link: https://drive.google.com/drive/folders/13eHz7L9Z-gndAxLkn0Acd7SsTgCQ7Fns?usp=sharing
+## 7) Video link: https://drive.google.com/drive/folders/13eHz7L9Z-gndAxLkn0Acd7SsTgCQ7Fns?usp=sharing
 
