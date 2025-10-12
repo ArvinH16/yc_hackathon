@@ -37,7 +37,7 @@ export function DialogContent({ className, children }: { className?: string; chi
   const ctx = React.useContext(DialogContext)!;
   if (!ctx.open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-[1000] flex items-center justify-center">
       <div className="absolute inset-0 bg-black/50" onClick={() => ctx.setOpen(false)} />
       <div className={cn("relative z-10 w-[92vw] max-w-xl rounded-lg border bg-card p-4 shadow-lg", className)}>
         {children}
@@ -61,4 +61,3 @@ export function DialogDescription({ className, ...props }: React.HTMLAttributes<
 export function DialogFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return <div className={cn("mt-4 flex items-center justify-end gap-2", className)} {...props} />;
 }
-

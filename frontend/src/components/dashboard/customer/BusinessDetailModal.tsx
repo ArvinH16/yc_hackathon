@@ -9,7 +9,9 @@ import { ResponsiveDialog } from '@/components/ui/responsive-dialog';
 import { ResponsiveTabs } from '@/components/ui/responsive-tabs';
 import { useViewMode } from '@/components/providers/view-mode-provider';
 import { getEffectiveCIConfig } from '@/lib/config';
-import { assessCompetitiveness, defaultCustomer, getAIDetectionFor, getLeadForBusiness, suggestionsForClass } from '@/lib/selectors';
+import { assessCompetitiveness, defaultCustomer, getAIDetectionFor, getLeadForBusiness, suggestionsForClass, getAgentEvaluation, hasAgentEvaluation } from '@/lib/selectors';
+import { AgentEvaluationCard } from '@/components/analytics/AgentEvaluationCard';
+import { EmptyState } from '@/components/ui/empty-state';
 import Link from 'next/link';
 
 interface Props {
@@ -101,10 +103,35 @@ export function BusinessDetailModal({ business, onClose, defaultTab }: Props) {
                     </div>
                   ),
                 });
+
+                // Agent Evaluation tab (salon view)
+                const detection = getAIDetectionFor(business.businessName);
+                const evalRun = getAgentEvaluation(business.businessName);
+                tabs.push({
+                  value: 'ai-eval',
+                  label: 'Agent Evaluation',
+                  content: (
+                    <div className="space-y-3 text-sm">
+                      {detection === 'ai' && evalRun ? (
+                        <AgentEvaluationCard run={evalRun} />
+                      ) : (
+                        <EmptyState
+                          title="No evaluation available"
+                          description={
+                            detection === 'ai'
+                              ? 'This AI flagged competitor has not been evaluated yet.'
+                              : 'This competitor is not flagged as using an AI receptionist.'
+                          }
+                        />
+                      )}
+                    </div>
+                  ),
+                });
               } else {
                 // admin (BeamBell) tabs
                 const detection = getAIDetectionFor(business.businessName);
                 const lead = getLeadForBusiness(business.businessName);
+                const evalRun = getAgentEvaluation(business.businessName);
                 tabs.push({
                   value: 'ai',
                   label: 'AI Analysis',
@@ -117,12 +144,33 @@ export function BusinessDetailModal({ business, onClose, defaultTab }: Props) {
                       <div>
                         <div className="font-medium">Transcript</div>
                         <div className="mt-1 text-muted-foreground">Transcript available (placeholder)</div>
-                        <ul className="mt-2 list-disc pl-5">
-                          <li>Agent missed detailed pricing follow-up</li>
+                         <ul className="mt-2 list-disc pl-5">
+                          <li>Agent missed detailed pricing follow up</li>
                           <li>Slow response on service add-ons</li>
                           <li>Inconsistent booking confirmation path</li>
-                        </ul>
+                         </ul>
                       </div>
+                    </div>
+                  ),
+                });
+                // Agent Evaluation tab (admin view)
+                tabs.push({
+                  value: 'ai-eval',
+                  label: 'Agent Evaluation',
+                  content: (
+                    <div className="space-y-3 text-sm">
+                      {detection === 'ai' && evalRun ? (
+                        <AgentEvaluationCard run={evalRun} />
+                      ) : (
+                        <EmptyState
+                          title="No evaluation available"
+                          description={
+                            detection === 'ai'
+                              ? 'This AI flagged competitor has not been evaluated yet.'
+                              : 'This competitor is not flagged as using an AI receptionist.'
+                          }
+                        />
+                      )}
                     </div>
                   ),
                 });
@@ -146,7 +194,7 @@ export function BusinessDetailModal({ business, onClose, defaultTab }: Props) {
                             <>
                               <div className="mb-2">Status: COMPETITOR — AI user</div>
                               <div className="rounded-md border p-3 whitespace-pre-wrap">
-                                We tested your current AI receptionist and found areas for improvement. Here's how Beam Bell outperforms on response speed, escalation, and pricing queries. Open to a head-to-head comparison?
+                                We tested your current AI receptionist and found areas for improvement. Here's how Beam Bell outperforms on response speed, escalation, and pricing queries. Open to a head to head comparison?
                               </div>
                             </>
                           )}

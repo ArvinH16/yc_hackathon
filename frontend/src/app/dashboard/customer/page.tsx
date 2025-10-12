@@ -22,21 +22,32 @@ export default function CustomerOverviewPage() {
 
   return (
     <PageContainer>
-      <PageHeader title={biz.businessName} description={profile.tagline} actions={
-        <div className="flex gap-2">
-          <Link href="/dashboard/customer/map">
-            <Button variant="secondary">Open Map</Button>
-          </Link>
-          <Link href="/dashboard/customer/analytics">
-            <Button>Analytics</Button>
-          </Link>
-          <Link href="/dashboard/customer/monitoring">
-            <Button variant="outline">Monitoring</Button>
-          </Link>
-        </div>
-      } />
+      <PageHeader title={biz.businessName} description={profile.tagline} />
 
       <div className="mb-2 text-xs text-muted-foreground">You're viewing this from {mode === 'customer' ? 'Salon' : 'BeamBell'} view.</div>
+
+      {mode === 'admin' && (
+        <div className="mb-4">
+          <div className="mb-2 text-sm text-muted-foreground">AI Agent Evaluation (Coval)</div>
+          <div className="flex gap-2">
+            <a
+              href="https://app.coval.dev/beambell/runs/buxXcfdhyKtzufnWsTgFFU"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Open AI Agent Evaluation (Coval) in a new tab"
+              className="inline-flex"
+            >
+              <Button variant="outline">Open AI Agent Evaluation</Button>
+            </a>
+            <Button
+              variant="ghost"
+              onClick={() => navigator.clipboard?.writeText('https://app.coval.dev/beambell/runs/buxXcfdhyKtzufnWsTgFFU')}
+            >
+              Copy evaluation link
+            </Button>
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Card className="md:col-span-2">
@@ -133,23 +144,19 @@ export default function CustomerOverviewPage() {
           </CardContent>
         </Card>
 
-        <Card className="md:col-span-2">
-          <CardHeader>
-            <CardTitle>Quick Links</CardTitle>
-            <CardDescription>Common workflows</CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-wrap gap-2">
-            <Link href="/dashboard/customer/map">
-              <Button>Open Competitor Map</Button>
-            </Link>
-            <Link href="/dashboard/customer/analytics">
-              <Button variant="secondary">View Pricing Intelligence</Button>
-            </Link>
-            <Link href="/dashboard/customer/monitoring">
-              <Button variant="outline">Monitor Market Trends</Button>
-            </Link>
-          </CardContent>
-        </Card>
+        {mode === 'customer' && (
+          <Card className="md:col-span-2">
+            <CardHeader>
+              <CardTitle>Quick Links</CardTitle>
+              <CardDescription>Common workflows</CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-wrap gap-2">
+              <Link href="/dashboard/customer/analyze">
+                <Button>Analyze nearby competitors</Button>
+              </Link>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </PageContainer>
   );

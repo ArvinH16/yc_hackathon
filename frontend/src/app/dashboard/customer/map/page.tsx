@@ -23,7 +23,7 @@ export default function CustomerMapPage() {
   const legendMode = useMemo<'ai' | 'competitive'>(() => (mode === 'customer' ? 'competitive' : 'ai'), [mode]);
   return (
     <PageContainer size="wide">
-      <PageHeader title="Map" description="Competitor map with 10-mile radius" />
+      <PageHeader title="Map" description="Competitor map with 10 mile radius" />
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Card className="md:col-span-2">
           {/* Color mode derives from view mode; no manual selector */}

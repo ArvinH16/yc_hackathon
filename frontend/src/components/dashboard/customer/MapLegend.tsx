@@ -27,6 +27,19 @@ export function MapLegend({ className = "", mode = 'both' }: { className?: strin
             <span>{i.label}</span>
           </div>
         ))}
+        {mode === 'competitive' && (
+          <div className="mt-3 space-y-1 text-xs text-muted-foreground">
+            <div><span className="font-medium text-foreground">Easy target</span>: Competitor significantly cheaper than you.</div>
+            <div><span className="font-medium text-foreground">Similar</span>: Within a small price band around you.</div>
+            <div><span className="font-medium text-foreground">Threat</span>: Notably more expensive or cheaper than you.</div>
+          </div>
+        )}
+        {mode === 'competitive' && (
+          <div className="mt-2 flex items-center gap-2 text-muted-foreground">
+            <span className="inline-block h-3 w-3 rounded-full border-2" style={{ borderColor: '#3b82f6' }} />
+            <span>Blue outline indicates AI receptionist</span>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

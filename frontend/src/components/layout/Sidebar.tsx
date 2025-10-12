@@ -31,9 +31,6 @@ export function Sidebar({ open, onClose, collapsed = false }: { open: boolean; o
         collapsed ? "md:hidden" : "hidden md:block"
       )}>Navigation</div>
       <nav className="flex flex-col gap-1">
-        <Link href="/" className={cn("rounded-md px-3 py-2 text-sm hover:bg-muted flex items-center gap-2", pathname === "/" && "bg-muted")} onClick={onClose}>
-          <span className={collapsed ? "md:hidden" : ""}>Home</span>
-        </Link>
         {NAV.map((i) => (
           <Link
             key={i.href}

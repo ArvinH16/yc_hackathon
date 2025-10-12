@@ -3,6 +3,8 @@ import type { CIConfig } from '@/types/config';
 import { mockAIStatus } from '@/data/mock/mockAIStatus';
 import { mockLeads } from '@/data/mock/mockLeads';
 import { mockCompetitors, mockCustomerBusiness } from '@/data/mock/mockBusinesses';
+import { findAgentEvaluation } from '@/data/mock/mockAgentEvaluations';
+import type { AgentEvaluationRun } from '@/types/agentEval';
 
 export type CompetitiveClass = 'easy_target' | 'similar' | 'threat';
 
@@ -94,3 +96,10 @@ export function defaultCustomer() {
   return mockCustomerBusiness;
 }
 
+export function getAgentEvaluation(name: string): AgentEvaluationRun | undefined {
+  return findAgentEvaluation(name);
+}
+
+export function hasAgentEvaluation(name: string): boolean {
+  return !!findAgentEvaluation(name);
+}
