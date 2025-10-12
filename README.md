@@ -1,114 +1,63 @@
 # YC Hackathon Project
 
-End-to-end prototype with a Twilio outbound voice bot (FastAPI) and a Next.js frontend dashboard. The backend initiates calls and bridges audio via Twilio Media Streams to a Pipecat-based bot; the frontend provides customer/CRM views and analytics.
+## What is this?
+An outbound voice agent that dials a phone number via Twilio, streams audio to a Pipecat pipeline, and uses Google Gemini for real‑time conversation. The demo focuses on a simple goal: greet the callee, carry a brief exchange, and use a tool call to decide whether the other party is a human or another AI.
 
-## Project Status
+Highlights
+- Twilio Media Streams for bidirectional audio over WebSocket
+- Pipecat pipeline orchestrating STT → LLM → TTS
+- Gemini 2.5 Flash for dialogue + tool calling
+- Deepgram STT and ElevenLabs TTS for fast speech round‑trips
 
-- Status: Alpha (rapidly evolving; APIs and UI may change)
-- Targets: Local development first; production via Pipecat Cloud + Twilio
+## Demo (≤ 60 seconds)
+Add a short screen capture or phone capture demonstrating: starting an outbound call, live conversation, and the AI‑vs‑Human result.
 
-## Repository Layout
+- Video link (MP4 or YouTube/Vercel/Drive): <ADD_LINK_HERE>
+- Keep it under 60 seconds. Show the key moment where the model classifies the callee.
 
-- `backend/` — FastAPI server that initiates outbound calls and serves TwiML for Twilio Media Streams
-- `frontend/` — Next.js app with dashboard views and a local shadcn-inspired UI system
-- `docs/` — Guides, diagrams, and architecture notes
+## How we used Gemini and Pipecat
+- Orchestration: Pipecat builds a streaming audio pipeline that connects Twilio Media Streams to STT, LLM, and TTS components. See `backend/bot.py`.
+- Model: `GoogleLLMService(model="gemini-2.5-flash")` powers the assistant’s reasoning and tool use via Pipecat’s tool/function calling.
+- Tool calling: The LLM invokes a registered function `detect_ai_or_human` to classify the callee after a few exchanges. The function returns a concise verdict that is also surfaced in the conversation.
+- Audio I/O: Deepgram performs speech‑to‑text; ElevenLabs synthesizes the assistant’s voice responses; Silero VAD helps with turn‑taking. Audio runs at 8 kHz for telephony.
+- Transport: In local dev, Twilio connects to `FastAPIWebsocketTransport` (`/ws`). In production, the server routes to Pipecat Cloud (`wss://api.pipecat.daily.co/ws/twilio`) and uses `_pipecatCloudServiceHost` parameters.
 
-See `docs/README.md` for a browsable docs index.
+Key files
+- `backend/server.py` — Starts outbound calls (`/start`), serves TwiML (`/twiml`), and hosts the `/ws` endpoint.
+- `backend/bot.py` — Defines the Pipecat pipeline (Deepgram → Gemini → ElevenLabs), registers the detection tool, and runs the call session.
 
-## Quickstart
+## Other tools used
+- Twilio — outbound calls + Media Streams
+- Deepgram — streaming STT
+- ElevenLabs — TTS voice
+- FastAPI — webhook + WebSocket server
+- Next.js — frontend scaffolding
+- Silero VAD — voice activity detection for turn‑taking
+- Pipecat Cloud (production) — hosted bot transport
 
-Prerequisites:
+Not used (current prototype)
+- Boundary, Coval, Langfuse, Tavus
 
-- Python 3.10+
-- `uv` (Python package manager)
-- Node.js 18+ and npm (or pnpm/yarn/bun)
-- ngrok (for exposing the backend to Twilio during local dev)
+## What’s new during the hackathon
+Please list concretely what was built this weekend versus pre‑existing work. Examples:
+- New: Outbound call flow (`/start`, `/twiml`) and Twilio integration
+- New: Pipecat pipeline with Gemini 2.5 Flash + tool calling
+- New: AI‑vs‑Human detection function and prompt
+- New: Minimal UI and call triggers
+- Pre‑existing: Project scaffolding / prior experiments
 
-1) Configure backend environment
+Replace the bullets above with your exact scope for clarity to judges.
 
-```
-cp backend/env.example backend/.env
-# Fill in: TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER
-# Optional (for production): ENV=production, AGENT_NAME, ORGANIZATION_NAME
-# Optional (for voice AI): Gemini, Deepgram, Cartesia keys
-```
+## Feedback on the tools
+Constructive, quick notes to help others and the vendors:
+- Gemini: <what worked well / what could be improved>
+- Pipecat: <pipeline ergonomics, tool calling, Cloud integration>
+- Deepgram: <latency/accuracy observations>
+- ElevenLabs: <voice quality/latency>
+- Twilio: <Media Streams setup, webhook ergonomics>
+- DevEx/Docs: <which guides were most/least helpful>
 
-2) Run the backend
+## Live link (optional but recommended)
+- Try it here: <ADD_LIVE_URL>
+- If not public, add a 1–2 line note on how to run locally (and where a judge can find credentials flow). For full setup details, see `backend/README.md` and `docs/api/backend.md`.
 
-```
-cd backend
-uv sync
-uv run server.py  # serves on http://localhost:7860
-```
-
-3) Expose backend (for Twilio callbacks while local)
-
-```
-ngrok http 7860
-# Copy the https URL and use it as the host when initiating calls
-```
-
-4) Run the frontend
-
-```
-cd frontend
-npm install
-npm run dev  # http://localhost:3000
-```
-
-5) Make a test outbound call
-
-Use the backend endpoint to trigger a call (replace values):
-
-```
-curl -X POST https://<your-ngrok-subdomain>.ngrok.io/start \
-  -H "Content-Type: application/json" \
-  -d '{
-    "phone_number": "+1XXXXXXXXXX",
-    "body": {"user": {"id": "user123", "name": "Test"}}
-  }'
-```
-
-More details: `backend/README.md` and `docs/api/backend.md`.
-
-## Architecture Overview
-
-```mermaid
-flowchart LR
-  subgraph Client
-    Browser[Frontend (Next.js)]
-  end
-
-  subgraph Server
-    API[FastAPI Server]\n/start, /twiml, /ws
-    Bot[Pipecat Bot]
-  end
-
-  Twilio[Twilio Voice & Media Streams]
-
-  Browser -->|User triggers call| API
-  API -->|REST: Initiate Call| Twilio
-  Twilio -->|Fetch TwiML /twiml| API
-  Twilio -->|WebSocket Audio| API
-  API -->|WebSocket| Bot
-```
-
-See `docs/architecture/system-overview.md` and `docs/USER-JOURNEY-DIAGRAM.md` for more.
-
-## Development
-
-- Backend: FastAPI with Twilio integration. See `backend/README.md`.
-- Frontend: Next.js (App Router), TypeScript, Tailwind v4. See `frontend/README.md` and `frontend/README-UI.md`.
-
-## Contributing
-
-Contributions welcome. Open issues/PRs as needed. Keep docs updated when behavior changes (see `AGENTS.md`).
-
-## Security
-
-Please review `SECURITY.md` for how to report vulnerabilities.
-
-## Changelog and Roadmap
-
-- `CHANGELOG.md` follows Keep a Changelog format.
-- `ROADMAP.md` outlines near-term milestones.
