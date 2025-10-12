@@ -1,63 +1,35 @@
 # YC Hackathon Project
 
-## What is this?
-An outbound voice agent that dials a phone number via Twilio, streams audio to a Pipecat pipeline, and uses Google Gemini for real‑time conversation. The demo focuses on a simple goal: greet the callee, carry a brief exchange, and use a tool call to decide whether the other party is a human or another AI.
+Context: BeamBell is our broader product effort (separate repo) at https://www.beambell.com. BeamBell offers two AI services: AI Concierge: a personal, phone‑based assistant with 30 free minutes monthly for registered users; and AI Receptionist: a 24/7 business solution that answers calls, books appointments, and handles inquiries with calendar/CRM integrations. This hackathon project was built in isolation from those codebases to focus on outbound information gathering (offerings and pricing) and lightweight AI/human detection.
 
-Highlights
-- Twilio Media Streams for bidirectional audio over WebSocket
-- Pipecat pipeline orchestrating STT → LLM → TTS
-- Gemini 2.5 Flash for dialogue + tool calling
-- Deepgram STT and ElevenLabs TTS for fast speech round‑trips
+For salons: the dashboard shows a competitor map within a 50-mile radius, extracted service menus with normalized prices, pricing benchmarks and revenue opportunities, AI adoption flags, trend monitoring, and an Agent Evaluation panel powered by Coval.
 
-## Demo (≤ 60 seconds)
-Add a short screen capture or phone capture demonstrating: starting an outbound call, live conversation, and the AI‑vs‑Human result.
+## 1) What is this?
 
-- Video link (MP4 or YouTube/Vercel/Drive): <ADD_LINK_HERE>
-- Keep it under 60 seconds. Show the key moment where the model classifies the callee.
+An AI‑powered competitive intelligence add‑on for BeamBell. It automatically gathers, analyzes, and visualizes competitor data within a 50‑mile radius by combining a lightweight web scraper with an outbound phone agent that calls real businesses and asks straightforward questions like a person would: what do you offer, which services/products are available, and what are the prices. The agent follows up to clarify ranges, packages, and availability when answers are vague, then summarizes what it learned. The system normalizes pricing/services and AI‑adoption signals and feeds them into dashboards that highlight the local landscape and flag sales opportunities for BeamBell: who to contact, why, and what to say. Near the end of each call, the agent drops a casual check to see whether it was speaking with a human or an AI receptionist; the focus is useful business info first, with the AI check as a light add‑on.
 
-## How we used Gemini and Pipecat
-- Orchestration: Pipecat builds a streaming audio pipeline that connects Twilio Media Streams to STT, LLM, and TTS components. See `backend/bot.py`.
-- Model: `GoogleLLMService(model="gemini-2.5-flash")` powers the assistant’s reasoning and tool use via Pipecat’s tool/function calling.
-- Tool calling: The LLM invokes a registered function `detect_ai_or_human` to classify the callee after a few exchanges. The function returns a concise verdict that is also surfaced in the conversation.
-- Audio I/O: Deepgram performs speech‑to‑text; ElevenLabs synthesizes the assistant’s voice responses; Silero VAD helps with turn‑taking. Audio runs at 8 kHz for telephony.
-- Transport: In local dev, Twilio connects to `FastAPIWebsocketTransport` (`/ws`). In production, the server routes to Pipecat Cloud (`wss://api.pipecat.daily.co/ws/twilio`) and uses `_pipecatCloudServiceHost` parameters.
+## 2) A video, less than 60 seconds long. (Ideally this is a demo and not you saying the same thing as section 1. Seriously, less than 60 seconds. Really, I mean it. Less than 60 seconds.)
 
-Key files
-- `backend/server.py` — Starts outbound calls (`/start`), serves TwiML (`/twiml`), and hosts the `/ws` endpoint.
-- `backend/bot.py` — Defines the Pipecat pipeline (Deepgram → Gemini → ElevenLabs), registers the detection tool, and runs the call session.
+Video link: <ADD_LINK_HERE>. The recording shows: starting an outbound call, the agent asking about offerings and prices, quick clarifications on ranges/packages, the casual AI check near the end, and the final summary. Keep it under a minute.
 
-## Other tools used
-- Twilio — outbound calls + Media Streams
-- Deepgram — streaming STT
-- ElevenLabs — TTS voice
-- FastAPI — webhook + WebSocket server
-- Next.js — frontend scaffolding
-- Silero VAD — voice activity detection for turn‑taking
-- Pipecat Cloud (production) — hosted bot transport
+## 3) Describe how you used Gemini models and Pipecat. (You must use both Gemini models and Pipecat in this hackathon.)
 
-Not used (current prototype)
-- Boundary, Coval, Langfuse, Tavus
+Pipecat orchestrates the real‑time audio pipeline end‑to‑end: Twilio Media Streams send audio over WebSocket to our server, which runs a Pipecat graph that streams STT → LLM → TTS. Deepgram handles transcription, Gemini 2.5 Flash drives the conversation and tool calling, ElevenLabs speaks the replies, and Silero VAD manages turn‑taking. The model invokes a small tool, `detect_ai_or_human`, near the end of the call to issue a simple verdict without derailing the main Q&A. In local development Twilio connects directly to our FastAPI WebSocket at `/ws`; in production we route to Pipecat Cloud at `wss://api.pipecat.daily.co/ws/twilio`.
 
-## What’s new during the hackathon
-Please list concretely what was built this weekend versus pre‑existing work. Examples:
-- New: Outbound call flow (`/start`, `/twiml`) and Twilio integration
-- New: Pipecat pipeline with Gemini 2.5 Flash + tool calling
-- New: AI‑vs‑Human detection function and prompt
-- New: Minimal UI and call triggers
-- Pre‑existing: Project scaffolding / prior experiments
+Key files: `backend/server.py` (dial via `/start`, serve TwiML at `/twiml`, host `/ws`) and `backend/bot.py` (Pipecat graph: Deepgram → Gemini → ElevenLabs, tool registration, session flow).
 
-Replace the bullets above with your exact scope for clarity to judges.
+## 4) Describe other tools you used. So we can all learn from you, and so judges from Boundary, Coval, Langfuse, and Tavus can focus on projects that use those tools.
 
-## Feedback on the tools
-Constructive, quick notes to help others and the vendors:
-- Gemini: <what worked well / what could be improved>
-- Pipecat: <pipeline ergonomics, tool calling, Cloud integration>
-- Deepgram: <latency/accuracy observations>
-- ElevenLabs: <voice quality/latency>
-- Twilio: <Media Streams setup, webhook ergonomics>
-- DevEx/Docs: <which guides were most/least helpful>
+Twilio powers outbound calls and Media Streams. Deepgram provides low‑latency STT. ElevenLabs generates a clear, telephony‑rate voice. FastAPI hosts webhooks and the WebSocket. The frontend is a small Next.js app that surfaces extracted services and normalized prices, plus an “Agent Evaluation” panel. We use Coval for evaluation runs and metrics (call‑resolution success, conversation progression, latency) and link its dashboard directly in the UI. Not used in this prototype: Boundary, Langfuse, Tavus.
 
-## Live link (optional but recommended)
-- Try it here: <ADD_LIVE_URL>
-- If not public, add a 1–2 line note on how to run locally (and where a judge can find credentials flow). For full setup details, see `backend/README.md` and `docs/api/backend.md`.
+## 5) Tell us what you did new during the hackathon.
 
+We stood up the outbound call flow end‑to‑end (`/start` and `/twiml`), built the streaming Pipecat pipeline, moved to Gemini 2.5 Flash for tool‑calling dialogue, and implemented the core behavior for extracting offerings and prices with clarifying follow‑ups. We added the casual AI‑vs‑human check near the end of calls, wired evaluation through Coval, and shipped a minimal UI to trigger calls and display structured results. Prior work was only scaffolding; the real‑time agent and extraction logic came together this weekend.
+
+## 6) Give feedback on the tools you used. Sharing is caring. We want your feedback. (But, I hope it goes without saying, please be constructive.)
+
+It was our first time using Coval; their team was kind and hands‑on, helped us get started quickly, and made sure we evaluated the agent correctly; this shortened the loop from test sets to metrics and dashboards. The Pipecat team shared practical cookbooks and recipes that let us assemble the full agentic system quickly; that guidance was extremely helpful. Technically, Pipecat’s pipeline ergonomics made the streaming graph easy to reason about; Deepgram’s latency/accuracy supported natural turn‑taking; ElevenLabs produced consistent voice quality at 8 kHz; Twilio’s Media Streams behaved predictably in both local and Pipecat Cloud routing. We’ll add sharper numbers after more runs.
+
+## 7) [ Optional but highly recommended ]. A live link so we can try out your project.
+
+Live link: <ADD_LIVE_URL>. If this stays private for judging, you can run locally: follow `backend/README.md` and `docs/api/backend.md`, add credentials, start the FastAPI server and the frontend, trigger an outbound call, and watch the extracted services/prices and the AI check in the UI.
