@@ -56,14 +56,17 @@ def generate_prompt_with_gemini(business_info: Dict[str, Any]) -> str:
     model = genai.GenerativeModel('gemini-2.0-flash-exp')
 
     # Create a meta-prompt for Gemini to generate the conversation prompt
-    meta_prompt = f"""
+    # Using triple quotes to avoid format string issues
+    business_json = json.dumps(business_info, indent=2)
+
+    meta_prompt = """
 You are an expert AI prompt engineer. Create a detailed system prompt for an AI phone agent that will call the following business to gather information.
 
 BUSINESS INFORMATION:
-{json.dumps(business_info, indent=2)}
+""" + business_json + """
 
 CRITICAL CONTEXT:
-The AI agent is calling AS A POTENTIAL CUSTOMER TO this business. The agent is NOT an employee of this business. 
+The AI agent is calling AS A POTENTIAL CUSTOMER TO this business. The agent is NOT an employee of this business.
 The agent should introduce itself as someone interested in USING their services, not offering services.
 
 REQUIREMENTS:
@@ -90,55 +93,14 @@ The AI phone agent needs a system prompt that will guide it to:
    - After asking and gathering information, use the detect_ai_or_human function with careful analysis
    - Consider: their answer to the question, response patterns, natural pauses, perfect grammar, ability to discuss personal experiences
 
-4. FINAL REPORT REQUIREMENTS:
-   - When the conversation is wrapping up, call the submit_call_report tool exactly ONCE
-   - Populate every field in this structure, using null for any information you could not confirm:
-     {
-       "business_id": "uuid string",
-       "call_timestamp": "ISO 8601 UTC timestamp",
-       "call_outcome": "answered|voicemail|no_answer|busy|disconnected",
-       "contact_info": {
-         "person_name": "...",
-         "person_role": "owner|manager|employee|unknown",
-         "confirmed_business_name": "...",
-         "phone_number": "...",
-         "email": "..."
-       },
-       "business_details": {
-         "business_type": "restaurant|retail|service|office|other",
-         "services_offered": ["..."],
-         "hours_mentioned": "...",
-         "location_details": "...",
-         "number_of_locations": 0,
-         "years_in_business": "...",
-         "specialties": ["..."],
-         "current_vendors": ["..."]
-       },
-       "call_summary": {
-         "duration_seconds": 0,
-         "answered_by_human": true,
-         "interest_level": "interested|neutral|not_interested|unclear",
-         "tone": "friendly|neutral|dismissive|hostile"
-       },
-       "business_needs": {
-         "mentioned_challenges": ["..."],
-         "mentioned_interests": ["..."],
-         "current_pain_points": ["..."],
-         "open_to_solutions": true
-       },
-       "action_items": {
-         "send_information": true,
-         "send_to_email": "...",
-         "what_to_send": ["..."],
-         "schedule_follow_up_call": true,
-         "follow_up_date": "...",
-         "follow_up_time": "...",
-         "call_permission": "yes|no|maybe"
-       },
-       "notes": "..."
-     }
+4. FINAL REPORT REQUIREMENTS (CRITICAL):
+   - IMPORTANT: If the call seems like it might end soon (person is losing interest, call quality issues, getting short responses), immediately call submit_call_report with whatever information you have gathered so far
+   - When the conversation is wrapping up OR if you sense the call might disconnect, call the submit_call_report tool exactly ONCE
+   - Better to submit an incomplete report than no report at all
+   - Populate every field you can, using null for any information you could not confirm
+   - The report should include all standard fields: business_id, call_timestamp, call_outcome, contact_info, business_details, call_summary, business_needs, action_items, and notes
    - Estimate duration_seconds if exact timing is unavailable
-   - Ensure the tool call happens after all questions are answered and immediately before ending the call
+   - After submitting the report, you can end the call politely
 
 5. CONVERSATION FLOW:
    - Start with a warm greeting explaining you're a potential customer interested in their services
@@ -147,6 +109,7 @@ The AI phone agent needs a system prompt that will guide it to:
    - Be genuinely curious about their business as a prospective client would be
    - Transition naturally between topics
    - After gathering enough information, use the detect_ai_or_human function
+   - When you have basic information or if the call seems unstable, prepare to submit the report
 
 IMPORTANT:
 - Generate ONLY the system prompt text that will be used directly by the AI agent

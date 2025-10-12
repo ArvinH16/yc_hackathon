@@ -594,12 +594,13 @@ async def run_bot(transport: BaseTransport, handle_sigint: bool, custom_prompt: 
             "2. Ask detailed questions about their services, pricing, availability, hours, locations, years in business, specialties, and current vendors.\n"
             "3. Understand their challenges, interests, and openness to new solutions so you can record their needs accurately.\n"
             "4. After a few exchanges, casually ask if you are speaking with an AI assistant. Use the detect_ai_or_human tool once you have enough evidence.\n"
-            "5. Before ending the call, prepare to submit the complete conversation details by calling submit_call_report exactly once. Populate every field, using null where information was not obtained.\n\n"
+            "5. CRITICAL: Before ending the call OR if you sense the call might disconnect soon (getting short responses, person seems to want to hang up, poor call quality), immediately call submit_call_report with whatever information you have gathered. Better to submit an incomplete report than no report at all.\n\n"
             "Throughout the conversation:\n"
             "- Maintain the persona of a genuine potential customer with relevant follow-up questions.\n"
             "- Probe naturally for the data needed to complete the report, without sounding like a survey.\n"
-            "- Summarize key facts mentally so you can fill the report at the end.\n\n"
-            "When the conversation is wrapping up, call submit_call_report with the structured data (including contact_info, business_details, call_summary, business_needs, action_items, and notes). "
+            "- Summarize key facts mentally so you can fill the report at the end.\n"
+            "- If the person seems confused or unresponsive, gather what basic information you can and prepare to submit the report.\n\n"
+            "When the conversation is wrapping up OR if you sense the call ending soon, IMMEDIATELY call submit_call_report with the structured data (including contact_info, business_details, call_summary, business_needs, action_items, and notes). "
             "Provide the best available information, setting any missing fields to null. After submitting the report, end the call politely."
         )
 
@@ -655,6 +656,25 @@ async def run_bot(transport: BaseTransport, handle_sigint: bool, custom_prompt: 
     @transport.event_handler("on_client_disconnected")
     async def on_client_disconnected(transport, client):
         logger.info("Outbound call ended")
+
+        # Try to trigger a final report submission by injecting a message
+        # This gives the LLM one last chance to call submit_call_report
+        try:
+            await task.queue_frame(
+                LLMMessagesAppendFrame(
+                    messages=[{
+                        "role": "user",
+                        "content": "The call is ending now. Immediately submit the call report with all information you have gathered, using null for any missing fields."
+                    }],
+                    run_llm=True,
+                )
+            )
+            # Give it a moment to process
+            import asyncio
+            await asyncio.sleep(2)
+        except Exception as e:
+            logger.warning(f"Could not trigger final report on disconnect: {e}")
+
         await task.cancel()
 
     runner = PipelineRunner(handle_sigint=handle_sigint)
