@@ -4,6 +4,8 @@ Context: BeamBell is our broader product effort (separate repo) at https://www.b
 
 For salons: the dashboard shows a competitor map within a 50-mile radius, extracted service menus with normalized prices, pricing benchmarks and revenue opportunities, AI adoption flags, trend monitoring, and an Agent Evaluation panel powered by Coval.
 
+![System Architecture](Screenshot%202025-10-11%20at%205.33.58%20PM.png)
+
 ## 1) What is this?
 
 An AI‑powered competitive intelligence add‑on for BeamBell. It automatically gathers, analyzes, and visualizes competitor data within a 50‑mile radius by combining a lightweight web scraper with an outbound phone agent that calls real businesses and asks straightforward questions like a person would: what do you offer, which services/products are available, and what are the prices. The agent follows up to clarify ranges, packages, and availability when answers are vague, then summarizes what it learned. The system normalizes pricing/services and AI‑adoption signals and feeds them into dashboards that highlight the local landscape and flag sales opportunities for BeamBell: who to contact, why, and what to say. Near the end of each call, the agent drops a casual check to see whether it was speaking with a human or an AI receptionist; the focus is useful business info first, with the AI check as a light add‑on.
