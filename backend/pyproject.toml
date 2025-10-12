@@ -7,5 +7,7 @@ requires-python = ">=3.10"
 dependencies = [
   "pipecat-ai[websocket,elevenlabs,google,silero,deepgram,runner]>=0.0.90",
   "pipecatcloud>=0.2.4",
-  "twilio"
+  "twilio",
+  "google-generativeai",
+  "requests"
 ]

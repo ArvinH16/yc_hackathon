@@ -1,0 +1,55 @@
+{
+    "businessName": "Elegance Hair Studio",
+    "phone": "+12065734928",
+    "email": "info@elegancehairstudio.com",
+    "industry": "Hair Salon & Beauty Services",
+    "services": [
+        "Haircuts and styling",
+        "Hair coloring and highlights",
+        "Balayage and ombre",
+        "Keratin treatments",
+        "Hair extensions",
+        "Blowouts and updos",
+        "Perms and relaxers",
+        "Deep conditioning treatments",
+        "Bridal and special event styling",
+        "Men's grooming and cuts"
+    ],
+    "prices": {
+        "womens_haircut": "$60-$100",
+        "mens_haircut": "$35-$50",
+        "full_color": "$120-$200",
+        "highlights": "$150-$250",
+        "balayage": "$180-$300",
+        "keratin_treatment": "$250-$400",
+        "hair_extensions": "$300-$800",
+        "blowout": "$45-$65",
+        "updo": "$80-$150",
+        "deep_conditioning": "$40-$60"
+    },
+    "hours": {
+        "monday_friday": "9:00 AM - 7:00 PM",
+        "saturday": "8:00 AM - 6:00 PM",
+        "sunday": "10:00 AM - 5:00 PM",
+        "emergency": "Closed on major holidays"
+    },
+    "location": {
+        "address": "456 Salon Boulevard",
+        "city": "Palo Alto",
+        "state": "CA",
+        "zip": "94301"
+    },
+    "yearsInBusiness": 8,
+    "licensed": true,
+    "insured": true,
+    "specializations": [
+        "Color correction",
+        "Hair extensions specialist",
+        "Bridal styling",
+        "Curly hair specialist",
+        "Balayage expert"
+    ],
+    "staff": 6,
+    "bookingRequired": true,
+    "acceptsWalkIns": true
+}
