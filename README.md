@@ -33,3 +33,11 @@ It was our first time using Coval; their team was kind and hands‑on, helped us
 ## 7) [ Optional but highly recommended ]. A live link so we can try out your project.
 
 Live link: <ADD_LIVE_URL>. If this stays private for judging, you can run locally: follow `backend/README.md` and `docs/api/backend.md`, add credentials, start the FastAPI server and the frontend, trigger an outbound call, and watch the extracted services/prices and the AI check in the UI.
+
+## Documentation
+
+- **[Backend Usage & Testing Guide](docs/BACKEND_USAGE_AND_TESTING.md)** - Comprehensive guide for using and testing the backend system
+- **[Backend API Reference](docs/api/backend.md)** - API endpoint documentation
+- **[Backend README](backend/README.md)** - Quick start guide for the backend
+- **[Run Guide](docs/RUN_GUIDE.md)** - Instructions for running the entire application
+- **[System Overview](docs/architecture/system-overview.md)** - High-level architecture documentation

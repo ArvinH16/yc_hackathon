@@ -5,6 +5,7 @@ High-level docs for this repository. For a runnable guide, see `docs/RUN_GUIDE.m
 ## Guides
 
 - `docs/RUN_GUIDE.md` — Local run instructions and tips
+- `docs/BACKEND_USAGE_AND_TESTING.md` — Comprehensive backend usage and testing guide
 - `docs/IDEA.md` — Concept and value proposition
 - `docs/USER-JOURNEY-DIAGRAM.md` — Human vs AI agent journey
 

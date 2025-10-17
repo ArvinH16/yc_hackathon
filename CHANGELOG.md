@@ -11,6 +11,7 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 - Documentation index at `docs/README.md`
 - Code of Conduct, Security policies
 - Backend API doc at `docs/api/backend.md`
+- Backend Usage & Testing Guide at `docs/BACKEND_USAGE_AND_TESTING.md` - comprehensive guide for backend setup, testing, and troubleshooting
 - Frontend architecture doc at `docs/frontend/architecture.md`
 - PR and issue templates under `.github/`
 

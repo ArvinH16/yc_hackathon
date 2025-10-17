@@ -2,6 +2,8 @@
 
 This project is a Pipecat-based chatbot that integrates with Twilio to make outbound calls with personalized call information. The project includes FastAPI endpoints for initiating outbound calls and handling WebSocket connections with call context.
 
+> **📚 For comprehensive usage and testing instructions, see [Backend Usage & Testing Guide](../docs/BACKEND_USAGE_AND_TESTING.md)**
+
 ## How It Works
 
 When you want to make an outbound call:
