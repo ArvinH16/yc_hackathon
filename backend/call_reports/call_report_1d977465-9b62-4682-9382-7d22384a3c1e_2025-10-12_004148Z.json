@@ -1,0 +1,44 @@
+{
+  "business_id": "1d977465-9b62-4682-9382-7d22384a3c1e",
+  "call_timestamp": "2025-10-12T00:41:48Z",
+  "call_outcome": "disconnected",
+  "contact_info": {
+    "person_name": null,
+    "person_role": null,
+    "confirmed_business_name": null,
+    "phone_number": null,
+    "email": null
+  },
+  "business_details": {
+    "business_type": null,
+    "services_offered": null,
+    "hours_mentioned": null,
+    "location_details": null,
+    "number_of_locations": null,
+    "years_in_business": null,
+    "specialties": null,
+    "current_vendors": null
+  },
+  "call_summary": {
+    "duration_seconds": 10,
+    "answered_by_human": true,
+    "interest_level": "unclear",
+    "tone": "unclear"
+  },
+  "business_needs": {
+    "mentioned_challenges": null,
+    "mentioned_interests": null,
+    "current_pain_points": null,
+    "open_to_solutions": null
+  },
+  "action_items": {
+    "send_information": null,
+    "send_to_email": null,
+    "what_to_send": null,
+    "schedule_follow_up_call": null,
+    "follow_up_date": null,
+    "follow_up_time": null,
+    "call_permission": null
+  },
+  "notes": null
+}

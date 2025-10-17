@@ -1,0 +1,46 @@
+{
+  "business_id": "1d542387-f8cc-4f67-a720-33532c53443a",
+  "call_timestamp": "2025-10-12T00:45:38Z",
+  "call_outcome": "answered",
+  "contact_info": {
+    "person_name": null,
+    "person_role": null,
+    "confirmed_business_name": "Code Salon",
+    "phone_number": null,
+    "email": null
+  },
+  "business_details": {
+    "business_type": "service",
+    "services_offered": [
+      "haircut"
+    ],
+    "hours_mentioned": null,
+    "location_details": null,
+    "number_of_locations": null,
+    "years_in_business": null,
+    "specialties": null,
+    "current_vendors": null
+  },
+  "call_summary": {
+    "duration_seconds": null,
+    "answered_by_human": true,
+    "interest_level": "unclear",
+    "tone": "neutral"
+  },
+  "business_needs": {
+    "mentioned_challenges": null,
+    "mentioned_interests": null,
+    "current_pain_points": null,
+    "open_to_solutions": null
+  },
+  "action_items": {
+    "send_information": null,
+    "send_to_email": null,
+    "what_to_send": null,
+    "schedule_follow_up_call": null,
+    "follow_up_date": null,
+    "follow_up_time": null,
+    "call_permission": null
+  },
+  "notes": "The person immediately started talking about their business after confirming the name, without fully addressing the booking inquiry. The call ended abruptly."
+}

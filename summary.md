@@ -1,0 +1,1 @@
+AI caller that pulls business context from `backend/business_info.json`, generates a tailored calling prompt, and dials the business via Twilio. During the call it acts like a prospective customer, gathers service and pricing intel, detects if it’s speaking to AI, then saves and prints a structured call report JSON when the conversation ends.
